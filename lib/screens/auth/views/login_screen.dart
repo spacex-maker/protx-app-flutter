@@ -15,63 +15,16 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with SingleTickerProviderStateMixin {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.0, 0.7, curve: Curves.easeOut),
-      ),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.1, 1.0, curve: Curves.easeOutCubic),
-      ),
-    );
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.95,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.0, 0.8, curve: Curves.easeOutCubic),
-      ),
-    );
-
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final currentLocale = Provider.of<LocaleProvider>(context).locale;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -104,12 +57,7 @@ class _LoginScreenState extends State<LoginScreen>
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: Text(
-                      Provider.of<LocaleProvider>(context)
-                                  .locale
-                                  .languageCode ==
-                              'en'
-                          ? '🇺🇸 EN'
-                          : '🇨🇳 中文',
+                      '${L10n.getFlag(currentLocale.languageCode)} ${L10n.getLanguageName(currentLocale.languageCode)}',
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -177,199 +125,230 @@ class _LoginScreenState extends State<LoginScreen>
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Hero(
-              tag: 'login_image',
-              child: Container(
-                height: size.height * 0.35,
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage("assets/images/login_dark.png"),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      Colors.black26,
-                      BlendMode.darken,
-                    ),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.primaryColor.withOpacity(0.3),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.1),
-                            Colors.black.withOpacity(0.4),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Global Treasures",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 2,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black.withOpacity(0.3),
-                                  offset: const Offset(2, 2),
-                                  blurRadius: 4,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "Second-hand · Global · Trust",
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
-                              fontSize: 18,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              theme.primaryColor,
+              theme.primaryColor.withOpacity(0.8),
+              Colors.white,
+            ],
+            stops: const [0.0, 0.3, 0.6],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 欢迎文本
+                  const SizedBox(height: 40),
                   Text(
                     l10n.welcomeBack,
-                    style: theme.textTheme.headlineMedium?.copyWith(
+                    style: const TextStyle(
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: theme.primaryColor,
-                      letterSpacing: 1.5,
+                      color: Colors.white,
+                      letterSpacing: 1,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   Text(
                     l10n.discover,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: Colors.grey[600],
-                      height: 1.5,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.9),
+                      letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 32),
-                  LogInForm(formKey: _formKey),
-                  const SizedBox(height: 16),
-                  Align(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, passwordRecoveryScreenRoute);
-                      },
-                      child: Text(
-                        l10n.forgotPassword,
-                        style: TextStyle(
-                          color: theme.primaryColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 48),
+
+                  // 登录表单
                   Container(
-                    width: double.infinity,
-                    height: 56,
+                    padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        colors: [
-                          theme.primaryColor,
-                          theme.primaryColor.withOpacity(0.8),
-                        ],
-                      ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.primaryColor.withOpacity(0.3),
-                          blurRadius: 15,
-                          offset: const Offset(0, 8),
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
                       ],
                     ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            entryPointScreenRoute,
-                            ModalRoute.withName(logInScreenRoute),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: Text(
-                        l10n.signIn,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
-                        ),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // 邮箱输入框
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: l10n.email,
+                              prefixIcon: Icon(
+                                Icons.email_outlined,
+                                color: theme.primaryColor,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: theme.primaryColor.withOpacity(0.2),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: theme.primaryColor,
+                                ),
+                              ),
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Please enter your email';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+
+                          // 密码输入框
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: l10n.password,
+                              prefixIcon: Icon(
+                                Icons.lock_outline,
+                                color: theme.primaryColor,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: theme.primaryColor,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: theme.primaryColor.withOpacity(0.2),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: theme.primaryColor,
+                                ),
+                              ),
+                            ),
+                            obscureText: !_isPasswordVisible,
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Please enter your password';
+                              }
+                              return null;
+                            },
+                          ),
+
+                          // 忘记密码
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                l10n.forgotPassword,
+                                style: TextStyle(
+                                  color: theme.primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // 登录按钮
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState?.validate() ?? false) {
+                                // 处理登录逻辑
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: theme.primaryColor,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 2,
+                            ),
+                            child: Text(
+                              l10n.signIn,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        l10n.newToApp,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 16,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, signUpScreenRoute);
-                        },
-                        child: Text(
-                          l10n.joinNow,
+
+                  // 注册提示
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          l10n.newToApp,
                           style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
+                            color: Colors.grey[700],
+                            fontSize: 14,
                           ),
                         ),
-                      )
-                    ],
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/signup');
+                          },
+                          style: TextButton.styleFrom(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                          ),
+                          child: Text(
+                            l10n.joinNow,
+                            style: TextStyle(
+                              color: theme.primaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

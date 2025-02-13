@@ -14,6 +14,9 @@
     "agreeToTerms": "我同意服务条款和隐私政策",
     "alreadyHaveAccount": "已有账号？",
     "login": "登录",
+    "signUp": "注册",
+    "name": "姓名",
+    "termsAndConditions": "我同意服务条款",
     
     "@_CATEGORIES": {},
     "categories": "分类",

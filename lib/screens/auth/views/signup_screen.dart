@@ -2,6 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shop/screens/auth/views/components/sign_up_form.dart';
 import 'package:shop/route/route_constants.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../providers/locale_provider.dart';
+import '../../../l10n/l10n.dart';
 
 import '../../../constants.dart';
 
@@ -69,8 +73,112 @@ class _SignUpScreenState extends State<SignUpScreen>
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final currentLocale = Provider.of<LocaleProvider>(context).locale;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0, top: 8.0),
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.3),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Text(
+                      '${L10n.getFlag(currentLocale.languageCode)} ${L10n.getLanguageName(currentLocale.languageCode)}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: const BorderRadius.horizontal(
+                        right: Radius.circular(20),
+                      ),
+                    ),
+                    child: PopupMenuButton<Locale>(
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(
+                        Icons.language_rounded,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      position: PopupMenuPosition.under,
+                      elevation: 3,
+                      color: Colors.white.withOpacity(0.95),
+                      itemBuilder: (context) => L10n.all.map((locale) {
+                        final flag = L10n.getFlag(locale.languageCode);
+                        final name = L10n.getLanguageName(locale.languageCode);
+                        return PopupMenuItem(
+                          value: locale,
+                          child: Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(flag),
+                                const SizedBox(width: 12),
+                                Text(
+                                  name,
+                                  style: TextStyle(
+                                    color: theme.primaryColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onSelected: (locale) {
+                        final provider =
+                            Provider.of<LocaleProvider>(context, listen: false);
+                        provider.setLocale(locale);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           Container(
@@ -79,7 +187,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  theme.primaryColor.withOpacity(0.1),
+                  theme.primaryColor.withOpacity(0.8),
                   Colors.white,
                 ],
               ),
@@ -139,10 +247,10 @@ class _SignUpScreenState extends State<SignUpScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Let's get started!",
+                              l10n.signUp,
                               style: theme.textTheme.headlineMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: theme.primaryColor,
+                                color: Colors.white,
                                 letterSpacing: 1.5,
                               ),
                             ),
@@ -255,7 +363,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   ),
                                 ),
                                 child: Text(
-                                  "Create Account",
+                                  l10n.signUp,
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -272,7 +380,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Already have an account?",
+                                  l10n.alreadyHaveAccount,
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 16,
@@ -284,7 +392,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                         context, logInScreenRoute);
                                   },
                                   child: Text(
-                                    "Log in",
+                                    l10n.login,
                                     style: TextStyle(
                                       color: theme.primaryColor,
                                       fontSize: 16,

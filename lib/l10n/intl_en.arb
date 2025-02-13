@@ -14,6 +14,9 @@
     "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
     "alreadyHaveAccount": "Already have an account?",
     "login": "Login",
+    "signUp": "Sign Up",
+    "name": "Name",
+    "termsAndConditions": "I agree to the Terms & Conditions",
     
     "@_CATEGORIES": {},
     "categories": "Categories",
