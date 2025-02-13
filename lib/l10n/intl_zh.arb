@@ -1,0 +1,41 @@
+{
+    "appName": "全球宝藏",
+    "welcomeBack": "欢迎回来",
+    "discover": "发现全球独特宝藏",
+    "email": "邮箱",
+    "password": "密码",
+    "forgotPassword": "忘记密码？",
+    "signIn": "登录",
+    "newToApp": "首次使用全球宝藏？",
+    "joinNow": "立即加入",
+    "createAccount": "创建账号",
+    "fullName": "姓名",
+    "confirmPassword": "确认密码",
+    "agreeToTerms": "我同意服务条款和隐私政策",
+    "alreadyHaveAccount": "已有账号？",
+    "login": "登录",
+    
+    "@_CATEGORIES": {},
+    "categories": "分类",
+    "seeAll": "查看全部",
+    
+    "@_PRODUCT": {},
+    "addToCart": "加入购物车",
+    "buyNow": "立即购买",
+    "description": "商品描述",
+    "reviews": "评价",
+    
+    "@_CART": {},
+    "cart": "购物车",
+    "total": "总计",
+    "checkout": "结算",
+    
+    "@_PROFILE": {},
+    "profile": "个人中心",
+    "settings": "设置",
+    "language": "语言",
+    "darkMode": "深色模式",
+    "notifications": "通知",
+    "help": "帮助",
+    "logout": "退出登录"
+} 

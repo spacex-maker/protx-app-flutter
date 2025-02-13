@@ -1,16 +1,19 @@
 name: shop
-description: FlutterShop is a premium E-commerce UI kit that you can use to build various e-commerce apps using Flutter that works on both Android & iOS. This kit contains 100+ nicely crafted minimal screens that cover everything you need for your shop app.
-
-publish_to: "none"
-
+description: "A new Flutter project."
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: '>=3.2.3 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  provider: ^6.1.1
+  intl: ^0.19.0
+  shared_preferences: ^2.2.2  # 可选，用于保存语言设置
 
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.10+1
@@ -25,9 +28,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^2.0.0
 
 flutter:
+  generate: true  # 启用本地化代码生成
   uses-material-design: true
 
   assets:
@@ -41,10 +45,10 @@ flutter:
   fonts:
     - family: Plus Jakarta
       fonts:
-        - asset: assets/fonts/plus_jakarta/PlusJakartaDisplay-Regular.otf
-        - asset: assets/fonts/plus_jakarta/PlusJakartaDisplay-Medium.otf
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
           weight: 500
-        - asset: assets/fonts/plus_jakarta/PlusJakartaDisplay-Bold.otf
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
           weight: 700
     - family: Grandis Extended
       fonts:

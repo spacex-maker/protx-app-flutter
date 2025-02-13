@@ -1,0 +1,15 @@
+{
+    "appName": "글로벌 트레저",
+    "welcomeBack": "다시 오신 것을 환영합니다",
+    "discover": "전 세계의 독특한 보물을 발견하세요",
+    "email": "이메일",
+    "password": "비밀번호",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "signIn": "로그인",
+    "newToApp": "글로벌 트레저가 처음이신가요?",
+    "joinNow": "지금 가입하기",
+    "createAccount": "계정 만들기",
+    "fullName": "이름",
+    "confirmPassword": "비밀번호 확인",
+    "agreeToTerms": "이용약관 및 개인정보 처리방침에 동의합니다"
+} 

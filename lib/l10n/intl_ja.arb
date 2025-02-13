@@ -1,0 +1,15 @@
+{
+    "appName": "グローバルトレジャー",
+    "welcomeBack": "おかえりなさい",
+    "discover": "世界中のユニークな宝物を見つけよう",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "signIn": "ログイン",
+    "newToApp": "グローバルトレジャーは初めてですか？",
+    "joinNow": "今すぐ登録",
+    "createAccount": "アカウント作成",
+    "fullName": "氏名",
+    "confirmPassword": "パスワード（確認）",
+    "agreeToTerms": "利用規約とプライバシーポリシーに同意します"
+} 

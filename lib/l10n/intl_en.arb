@@ -1,0 +1,41 @@
+{
+    "appName": "Global Treasures",
+    "welcomeBack": "Welcome Back",
+    "discover": "Discover unique treasures worldwide",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "signIn": "Sign In",
+    "newToApp": "New to Global Treasures?",
+    "joinNow": "Join Now",
+    "createAccount": "Create Account",
+    "fullName": "Full Name",
+    "confirmPassword": "Confirm Password",
+    "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
+    
+    "@_CATEGORIES": {},
+    "categories": "Categories",
+    "seeAll": "See All",
+    
+    "@_PRODUCT": {},
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "description": "Description",
+    "reviews": "Reviews",
+    
+    "@_CART": {},
+    "cart": "Cart",
+    "total": "Total",
+    "checkout": "Checkout",
+    
+    "@_PROFILE": {},
+    "profile": "Profile",
+    "settings": "Settings",
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "notifications": "Notifications",
+    "help": "Help",
+    "logout": "Logout"
+} 

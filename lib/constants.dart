@@ -15,41 +15,50 @@ const grandisExtendedFont = "Grandis Extended";
 
 // On color 80, 60.... those means opacity
 
-const Color primaryColor = Color(0xFF7B61FF);
+// 主色调 - 使用自然绿色
+const Color primaryColor = Color(0xFF2E7D32); // 深绿色，代表环保和可持续发展
 
-const MaterialColor primaryMaterialColor =
-    MaterialColor(0xFF9581FF, <int, Color>{
-  50: Color(0xFFEFECFF),
-  100: Color(0xFFD7D0FF),
-  200: Color(0xFFBDB0FF),
-  300: Color(0xFFA390FF),
-  400: Color(0xFF8F79FF),
-  500: Color(0xFF7B61FF),
-  600: Color(0xFF7359FF),
-  700: Color(0xFF684FFF),
-  800: Color(0xFF5E45FF),
-  900: Color(0xFF6C56DD),
-});
+// 创建 MaterialColor
+const MaterialColor primaryMaterialColor = MaterialColor(
+  0xFF2E7D32,
+  <int, Color>{
+    50: Color(0xFFE8F5E9),
+    100: Color(0xFFC8E6C9),
+    200: Color(0xFFA5D6A7),
+    300: Color(0xFF81C784),
+    400: Color(0xFF66BB6A),
+    500: Color(0xFF2E7D32), // primary
+    600: Color(0xFF43A047),
+    700: Color(0xFF388E3C),
+    800: Color(0xFF2E7D32),
+    900: Color(0xFF1B5E20),
+  },
+);
 
-const Color blackColor = Color(0xFF16161E);
+// 辅助颜色
+const Color secondaryColor = Color(0xFF81C784); // 浅绿色，用于次要元素
+const Color accentColor = Color(0xFF4CAF50); // 中绿色，用于强调
+
+// 中性色
+const Color blackColor = Color(0xFF1C1C1C);
 const Color blackColor80 = Color(0xFF45454B);
 const Color blackColor60 = Color(0xFF737378);
-const Color blackColor40 = Color(0xFFA2A2A5);
+const Color blackColor40 = Color(0xFF404040);
 const Color blackColor20 = Color(0xFFD0D0D2);
-const Color blackColor10 = Color(0xFFE8E8E9);
+const Color blackColor10 = Color(0xFF1A1A1A);
 const Color blackColor5 = Color(0xFFF3F3F4);
 
 const Color whiteColor = Colors.white;
 const Color whileColor80 = Color(0xFFCCCCCC);
 const Color whileColor60 = Color(0xFF999999);
-const Color whileColor40 = Color(0xFF666666);
+const Color whileColor40 = Color(0xFF404040);
 const Color whileColor20 = Color(0xFF333333);
 const Color whileColor10 = Color(0xFF191919);
 const Color whileColor5 = Color(0xFF0D0D0D);
 
-const Color greyColor = Color(0xFFB8B5C3);
-const Color lightGreyColor = Color(0xFFF8F8F9);
-const Color darkGreyColor = Color(0xFF1C1C25);
+const Color greyColor = Color(0xFF8E8E8E);
+const Color lightGreyColor = Color(0xFFF5F5F5);
+const Color darkGreyColor = Color(0xFF333333);
 // const Color greyColor80 = Color(0xFFC6C4CF);
 // const Color greyColor60 = Color(0xFFD4D3DB);
 // const Color greyColor40 = Color(0xFFE3E1E7);
@@ -58,9 +67,10 @@ const Color darkGreyColor = Color(0xFF1C1C25);
 // const Color greyColor5 = Color(0xFFFBFBFC);
 
 const Color purpleColor = Color(0xFF7B61FF);
-const Color successColor = Color(0xFF2ED573);
-const Color warningColor = Color(0xFFFFBE21);
-const Color errorColor = Color(0xFFEA5B5B);
+const Color successColor = Color(0xFF388E3C); // 成功绿色
+const Color warningColor = Color(0xFFF9A825); // 警告黄色
+const Color errorColor = Color(0xFFD32F2F); // 错误红色
+const Color infoColor = Color(0xFF1976D2); // 信息蓝色
 
 const double defaultPadding = 16.0;
 const double defaultBorderRadious = 12.0;
