@@ -17,7 +17,15 @@
     "signUp": "注册",
     "name": "姓名",
     "termsAndConditions": "我同意服务条款",
-    
+    "termsOfService": "服务条款",
+    "privacyPolicy": "隐私政策",
+    "and": "和",
+    "orSignUpWith": "或通过以下方式注册",
+    "rememberMe": "记住我",
+    "orSignInWith": "或通过以下方式登录",
+
+
+
     "@_CATEGORIES": {},
     "categories": "分类",
     "seeAll": "查看全部",

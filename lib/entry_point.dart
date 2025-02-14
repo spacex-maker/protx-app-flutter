@@ -16,8 +16,7 @@ class _EntryPointState extends State<EntryPoint> {
     HomeScreen(),
     DiscoverScreen(),
     BookmarkScreen(),
-    // EmptyCartScreen(), // if Cart is empty
-    CartScreen(),
+    ChatScreen(),
     ProfileScreen(),
   ];
   int _currentIndex = 0;
@@ -38,48 +37,111 @@ class _EntryPointState extends State<EntryPoint> {
 
     return Scaffold(
       appBar: AppBar(
-        // pinned: true,
-        // floating: true,
-        // snap: true,
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        leading: const SizedBox(),
-        leadingWidth: 0,
-        centerTitle: false,
-        title: SvgPicture.asset(
-          "assets/logo/Shoplon.svg",
-          colorFilter: ColorFilter.mode(
-              Theme.of(context).iconTheme.color!, BlendMode.srcIn),
-          height: 20,
-          width: 100,
+        elevation: 0,
+        title: Row(
+          children: [
+            // 闲鱼图标
+            Icon(
+              Icons.sell_outlined,
+              size: 24,
+              color: Theme.of(context).primaryColor,
+            ),
+            const SizedBox(width: 12),
+
+            // 搜索框
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, searchScreenRoute);
+                },
+                child: Container(
+                  height: 36,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.search,
+                        size: 18,
+                        color: Colors.grey.shade600,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '搜索',
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         actions: [
+          // 搜索按钮
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, searchScreenRoute);
             },
-            icon: SvgPicture.asset(
-              "assets/icons/Search.svg",
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).textTheme.bodyLarge!.color!,
-                  BlendMode.srcIn),
+            icon: Icon(
+              Icons.search,
+              color: Colors.grey.shade700,
+              size: 22,
             ),
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, notificationsScreenRoute);
-            },
-            icon: SvgPicture.asset(
-              "assets/icons/Notification.svg",
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).textTheme.bodyLarge!.color!,
-                  BlendMode.srcIn),
-            ),
+          // 消息按钮
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, notificationsScreenRoute);
+                },
+                icon: Icon(
+                  Icons.chat_bubble_outline,
+                  color: Colors.grey.shade700,
+                  size: 22,
+                ),
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      width: 1.5,
+                    ),
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: const Text(
+                    '2',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
-      // body: _pages[_currentIndex],
       body: PageTransitionSwitcher(
         duration: defaultDuration,
         transitionBuilder: (child, animation, secondAnimation) {

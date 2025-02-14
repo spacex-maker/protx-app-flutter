@@ -14,6 +14,7 @@ dependencies:
   provider: ^6.1.1
   intl: ^0.19.0
   shared_preferences: ^2.2.2  # 可选，用于保存语言设置
+  font_awesome_flutter: ^10.6.0
 
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.10+1
@@ -23,6 +24,8 @@ dependencies:
   flutter_widget_from_html_core: ^0.15.1
   animations: ^2.0.11
   url_launcher: ^6.3.0
+  carousel_slider: ^4.2.1
+  flutter_swiper_null_safety: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -31,7 +34,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
-  generate: true  # 启用本地化代码生成
+  generate: true  # 启用自动生成
   uses-material-design: true
 
   assets:
@@ -42,22 +45,22 @@ flutter:
     - assets/logo/
     - assets/screens/
 
-  fonts:
-    - family: Plus Jakarta
-      fonts:
-        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
-        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
-          weight: 700
-    - family: Grandis Extended
-      fonts:
-        - asset: assets/fonts/grandis_extended/GrandisExtended-Regular.ttf
-        - asset: assets/fonts/grandis_extended/GrandisExtended-Thin.ttf
-          weight: 300
-        - asset: assets/fonts/grandis_extended/GrandisExtended-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/grandis_extended/GrandisExtended-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/grandis_extended/GrandisExtended-Black.ttf
-          weight: 900
+#  fonts:
+#    - family: Plus Jakarta
+#      fonts:
+#        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+#        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+#          weight: 500
+#        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+#          weight: 700
+#    - family: Grandis Extended
+#      fonts:
+#        - asset: assets/fonts/grandis_extended/GrandisExtended-Regular.ttf
+#        - asset: assets/fonts/grandis_extended/GrandisExtended-Thin.ttf
+#          weight: 300
+#        - asset: assets/fonts/grandis_extended/GrandisExtended-Medium.ttf
+#          weight: 500
+#        - asset: assets/fonts/grandis_extended/GrandisExtended-Bold.ttf
+#          weight: 700
+#        - asset: assets/fonts/grandis_extended/GrandisExtended-Black.ttf
+#          weight: 900

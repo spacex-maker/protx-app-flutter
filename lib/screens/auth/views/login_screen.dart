@@ -5,8 +5,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../l10n/l10n.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/gestures.dart';
+import 'dart:ui';
 
 import 'components/login_form.dart';
+import '../../../screens/auth/views/password_recovery_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,13 +20,41 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
+  bool _rememberMe = false;
+
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeIn,
+      ),
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final currentLocale = Provider.of<LocaleProvider>(context).locale;
@@ -128,225 +161,287 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
-              theme.primaryColor,
               theme.primaryColor.withOpacity(0.8),
-              Colors.white,
+              const Color(0xFF6C63FF),
+              const Color(0xFF3B3363),
             ],
-            stops: const [0.0, 0.3, 0.6],
           ),
         ),
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 欢迎文本
-                  const SizedBox(height: 40),
-                  Text(
-                    l10n.welcomeBack,
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 1,
-                    ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    l10n.discover,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white.withOpacity(0.9),
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 48),
+                  child: IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: FadeTransition(
+                        opacity: _fadeAnimation,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // 主要内容列
+                            Column(
+                              children: [
+                                const SizedBox(height: 20),
 
-                  // 登录表单
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
+                                // Logo
+                                Icon(
+                                  Icons.shopping_bag_outlined,
+                                  size: 40,
+                                  color: Colors.white.withOpacity(0.9),
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                // 欢迎文本
+                                Text(
+                                  l10n.welcomeBack,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 4),
+                                Text(
+                                  l10n.discover,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white.withOpacity(0.85),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 24),
+
+                                // 登录表单
+                                LogInForm(formKey: _formKey),
+
+                                const SizedBox(height: 16),
+
+                                // 记住我和忘记密码
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: Checkbox(
+                                            value: _rememberMe,
+                                            onChanged: (value) {
+                                              setState(
+                                                  () => _rememberMe = value!);
+                                            },
+                                            fillColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.white),
+                                            checkColor: theme.primaryColor,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          l10n.rememberMe,
+                                          style: TextStyle(
+                                            color:
+                                                Colors.white.withOpacity(0.9),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const PasswordRecoveryScreen(),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        l10n.forgotPassword,
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.9),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 24),
+
+                                // 社交媒体登录分隔线
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 24),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          height: 1,
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.white.withOpacity(0.01),
+                                                Colors.white.withOpacity(0.25),
+                                                Colors.white.withOpacity(0.25),
+                                                Colors.white.withOpacity(0.01),
+                                              ],
+                                              stops: const [0.0, 0.3, 0.7, 1.0],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Text(
+                                          l10n.orSignInWith,
+                                          style: TextStyle(
+                                            color:
+                                                Colors.white.withOpacity(0.7),
+                                            fontSize: 14,
+                                            letterSpacing: 0.5,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          height: 1,
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.white.withOpacity(0.01),
+                                                Colors.white.withOpacity(0.25),
+                                                Colors.white.withOpacity(0.25),
+                                                Colors.white.withOpacity(0.01),
+                                              ],
+                                              stops: const [0.0, 0.3, 0.7, 1.0],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                // 社交媒体登录按钮
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _buildSocialButton(
+                                      icon: FontAwesomeIcons.google,
+                                      onTap: () {},
+                                    ),
+                                    const SizedBox(width: 20),
+                                    _buildSocialButton(
+                                      icon: FontAwesomeIcons.facebook,
+                                      onTap: () {},
+                                    ),
+                                    const SizedBox(width: 20),
+                                    _buildSocialButton(
+                                      icon: FontAwesomeIcons.apple,
+                                      onTap: () {},
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                            // 底部注册提示
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: l10n.newToApp,
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.9),
+                                    fontSize: 14,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: ' ${l10n.joinNow}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Navigator.pushNamed(
+                                              context, signUpScreenRoute);
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // 邮箱输入框
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: l10n.email,
-                              prefixIcon: Icon(
-                                Icons.email_outlined,
-                                color: theme.primaryColor,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: theme.primaryColor.withOpacity(0.2),
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: theme.primaryColor,
-                                ),
-                              ),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Please enter your email';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-
-                          // 密码输入框
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: l10n.password,
-                              prefixIcon: Icon(
-                                Icons.lock_outline,
-                                color: theme.primaryColor,
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: theme.primaryColor,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _isPasswordVisible = !_isPasswordVisible;
-                                  });
-                                },
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: theme.primaryColor.withOpacity(0.2),
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: theme.primaryColor,
-                                ),
-                              ),
-                            ),
-                            obscureText: !_isPasswordVisible,
-                            validator: (value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Please enter your password';
-                              }
-                              return null;
-                            },
-                          ),
-
-                          // 忘记密码
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                l10n.forgotPassword,
-                                style: TextStyle(
-                                  color: theme.primaryColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // 登录按钮
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState?.validate() ?? false) {
-                                // 处理登录逻辑
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: theme.primaryColor,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 2,
-                            ),
-                            child: Text(
-                              l10n.signIn,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
 
-                  // 注册提示
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          l10n.newToApp,
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontSize: 14,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/signup');
-                          },
-                          style: TextButton.styleFrom(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                          ),
-                          child: Text(
-                            l10n.joinNow,
-                            style: TextStyle(
-                              color: theme.primaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+  Widget _buildSocialButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white.withOpacity(0.15),
+            Colors.white.withOpacity(0.05),
+          ],
+        ),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.15),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: FaIcon(
+              icon,
+              color: Colors.white.withOpacity(0.9),
+              size: 24,
             ),
           ),
         ),

@@ -21,8 +21,6 @@ class _SignUpScreenState extends State<SignUpScreen>
   final _formKey = GlobalKey<FormState>();
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _scaleAnimation;
   bool _acceptedTerms = false;
 
   @override
@@ -30,33 +28,13 @@ class _SignUpScreenState extends State<SignUpScreen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1000),
     );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.7, curve: Curves.easeOut),
-      ),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.1, 1.0, curve: Curves.easeOutCubic),
-      ),
-    );
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.95,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.0, 0.8, curve: Curves.easeOutCubic),
+        curve: Curves.easeIn,
       ),
     );
 
@@ -71,7 +49,6 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final currentLocale = Provider.of<LocaleProvider>(context).locale;
@@ -97,13 +74,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                   color: Colors.white.withOpacity(0.3),
                   width: 1,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -179,240 +149,230 @@ class _SignUpScreenState extends State<SignUpScreen>
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  theme.primaryColor.withOpacity(0.8),
-                  Colors.white,
-                ],
-              ),
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              theme.primaryColor.withOpacity(0.8),
+              const Color(0xFF6C63FF),
+              const Color(0xFF3B3363),
+            ],
           ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Hero(
-                  tag: 'signup_image',
-                  child: Container(
-                    height: size.height * 0.4,
-                    decoration: BoxDecoration(
-                      image: const DecorationImage(
-                        image: AssetImage("assets/images/signUp_dark.png"),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.primaryColor.withOpacity(0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(50),
-                          bottomRight: Radius.circular(50),
-                        ),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.1),
-                            Colors.black.withOpacity(0.4),
+        ),
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: FadeTransition(
+                        opacity: _fadeAnimation,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 20),
+
+                                Center(
+                                  child: Icon(
+                                    Icons.person_add_outlined,
+                                    size: 40,
+                                    color: Colors.white.withOpacity(0.9),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                Center(
+                                  child: Text(
+                                    l10n.signUp,
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 4),
+                                Center(
+                                  child: Text(
+                                    l10n.discover,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white.withOpacity(0.85),
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 24),
+
+                                SignUpForm(formKey: _formKey),
+
+                                const SizedBox(height: 16),
+
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white.withOpacity(0.1),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Transform.scale(
+                                        scale: 1.0,
+                                        child: Checkbox(
+                                          value: _acceptedTerms,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _acceptedTerms = value ?? false;
+                                            });
+                                          },
+                                          fillColor: MaterialStateProperty.all(
+                                              Colors.white),
+                                          checkColor: theme.primaryColor,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text.rich(
+                                          TextSpan(
+                                            text: l10n.agreeToTerms + " ",
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white.withOpacity(0.9),
+                                              fontSize: 14,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: l10n.termsOfService,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                ),
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            termsOfServicesScreenRoute);
+                                                      },
+                                              ),
+                                              TextSpan(text: " ${l10n.and} "),
+                                              TextSpan(
+                                                text: l10n.privacyPolicy,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                ),
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        // Add privacy policy navigation
+                                                      },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                const SizedBox(height: 24),
+
+                                // Sign Up Button
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 56,
+                                  child: ElevatedButton(
+                                    onPressed: _acceptedTerms
+                                        ? () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              Navigator.pushNamed(context,
+                                                  entryPointScreenRoute);
+                                            }
+                                          }
+                                        : null,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: theme.primaryColor,
+                                      disabledBackgroundColor: Colors.grey[300],
+                                      disabledForegroundColor: Colors.grey[600],
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      l10n.signUp,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            // 底部登录提示
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    l10n.alreadyHaveAccount,
+                                    style: TextStyle(
+                                      color: Colors.white.withOpacity(0.9),
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, loginScreenRoute);
+                                    },
+                                    child: Text(
+                                      l10n.login,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: SlideTransition(
-                        position: _slideAnimation,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.signUp,
-                              style: theme.textTheme.headlineMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                letterSpacing: 1.5,
-                              ),
-                            ),
-                            const SizedBox(height: defaultPadding / 2),
-                            Text(
-                              "Please enter your valid data in order to create an account.",
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: Colors.grey[600],
-                                height: 1.5,
-                              ),
-                            ),
-                            const SizedBox(height: defaultPadding * 1.5),
-                            SignUpForm(formKey: _formKey),
-                            const SizedBox(height: defaultPadding),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey[100],
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              child: Row(
-                                children: [
-                                  Transform.scale(
-                                    scale: 1.1,
-                                    child: Checkbox(
-                                      value: _acceptedTerms,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _acceptedTerms = value ?? false;
-                                        });
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text.rich(
-                                      TextSpan(
-                                        text: "I agree with the ",
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          height: 1.5,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {
-                                                Navigator.pushNamed(context,
-                                                    termsOfServicesScreenRoute);
-                                              },
-                                            text: "Terms of service",
-                                            style: TextStyle(
-                                              color: theme.primaryColor,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          const TextSpan(text: " & "),
-                                          TextSpan(
-                                            text: "Privacy Policy",
-                                            style: TextStyle(
-                                              color: theme.primaryColor,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: defaultPadding * 2),
-                            Container(
-                              width: double.infinity,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    theme.primaryColor,
-                                    theme.primaryColor.withOpacity(0.8),
-                                  ],
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: theme.primaryColor.withOpacity(0.3),
-                                    blurRadius: 15,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ],
-                              ),
-                              child: ElevatedButton(
-                                onPressed: _acceptedTerms
-                                    ? () {
-                                        if (_formKey.currentState!.validate()) {
-                                          Navigator.pushNamed(
-                                              context, entryPointScreenRoute);
-                                        }
-                                      }
-                                    : null,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                                child: Text(
-                                  l10n.signUp,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1.2,
-                                    color: _acceptedTerms
-                                        ? Colors.white
-                                        : Colors.grey[400],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: defaultPadding),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  l10n.alreadyHaveAccount,
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, logInScreenRoute);
-                                  },
-                                  child: Text(
-                                    l10n.login,
-                                    style: TextStyle(
-                                      color: theme.primaryColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+              );
+            },
           ),
-        ],
+        ),
       ),
     );
   }

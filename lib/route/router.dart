@@ -72,7 +72,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //   return MaterialPageRoute(
     //     builder: (context) => const PreferredLanguageScreen(),
     //   );
-    case logInScreenRoute:
+    case loginScreenRoute:
       return MaterialPageRoute(
         builder: (context) => const LoginScreen(),
       );

@@ -40,5 +40,11 @@
     "darkMode": "Dark Mode",
     "notifications": "Notifications",
     "help": "Help",
-    "logout": "Logout"
+    "logout": "Logout",
+    "rememberMe": "Remember me",
+    "orSignInWith": "Or sign in with",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "and": "and",
+    "orSignUpWith": "Or sign up with"
 } 
