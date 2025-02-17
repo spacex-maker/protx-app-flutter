@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PasswordRecoveryScreen extends StatefulWidget {
   const PasswordRecoveryScreen({super.key});
@@ -91,6 +92,8 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -102,7 +105,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen>
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: SlideTransition(
@@ -114,73 +117,55 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen>
                   children: [
                     Text(
                       _isVerified
-                          ? "Set New Password"
+                          ? l10n.setNewPasswordTitle
                           : _isEmailSent
-                              ? "Verify Your Email"
-                              : "Forgot Password?",
-                      style: theme.textTheme.headlineMedium?.copyWith(
+                              ? l10n.verifyEmailTitle
+                              : l10n.forgotPasswordTitle,
+                      style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.primaryColor,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Text(
                       _isVerified
-                          ? "Create a new password for your account"
+                          ? l10n.setNewPasswordDesc
                           : _isEmailSent
-                              ? "Please enter the 4-digit code sent to your email"
-                              : "Don't worry! It happens. Please enter the email associated with your account.",
-                      style: theme.textTheme.bodyLarge?.copyWith(
+                              ? l10n.verifyEmailDesc
+                              : l10n.forgotPasswordDesc,
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.grey[600],
-                        height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 24),
                     if (!_isEmailSent && !_isVerified) ...[
-                      _buildEmailInput(theme),
+                      _buildEmailInput(theme, l10n),
                     ] else if (_isEmailSent && !_isVerified) ...[
                       _buildOTPInput(theme),
                     ] else ...[
-                      _buildNewPasswordInput(theme),
+                      _buildNewPasswordInput(theme, l10n),
                     ],
-                    const SizedBox(height: 40),
-                    Container(
+                    const SizedBox(height: 24),
+                    SizedBox(
                       width: double.infinity,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: LinearGradient(
-                          colors: [
-                            theme.primaryColor,
-                            theme.primaryColor.withOpacity(0.8),
-                          ],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.primaryColor.withOpacity(0.3),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
                       child: ElevatedButton(
                         onPressed: _handleSubmit,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
+                          backgroundColor: theme.primaryColor,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         child: Text(
                           _isVerified
-                              ? "Reset Password"
+                              ? l10n.resetPasswordButton
                               : _isEmailSent
-                                  ? "Verify"
-                                  : "Send Code",
+                                  ? l10n.verifyButton
+                                  : l10n.sendCodeButton,
                           style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -195,32 +180,41 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen>
     );
   }
 
-  Widget _buildEmailInput(ThemeData theme) {
+  Widget _buildEmailInput(ThemeData theme, AppLocalizations l10n) {
     return TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
+      style: const TextStyle(fontSize: 16, height: 1.5),
       decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email address",
-        prefixIcon: Icon(Icons.email_outlined, color: theme.primaryColor),
+        labelText: l10n.emailLabel,
+        hintText: l10n.emailHint,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        prefixIcon: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child:
+              Icon(Icons.email_outlined, color: theme.primaryColor, size: 20),
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey[300]!),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey[300]!),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: theme.primaryColor),
         ),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter your email';
+          return l10n.emailEmpty;
         }
         if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-          return 'Please enter a valid email';
+          return l10n.emailInvalid;
         }
         return null;
       },
@@ -233,26 +227,28 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen>
       children: List.generate(
         4,
         (index) => SizedBox(
-          width: 65,
+          width: 60,
           child: TextFormField(
             controller: _otpControllers[index],
             focusNode: _otpFocusNodes[index],
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
             maxLength: 1,
-            style: const TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 20, height: 1.5),
             decoration: InputDecoration(
               counterText: "",
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: theme.primaryColor, width: 2),
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: theme.primaryColor),
               ),
             ),
             inputFormatters: [
@@ -269,59 +265,77 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen>
     );
   }
 
-  Widget _buildNewPasswordInput(ThemeData theme) {
+  Widget _buildNewPasswordInput(ThemeData theme, AppLocalizations l10n) {
     return Column(
       children: [
         TextFormField(
           obscureText: true,
+          style: const TextStyle(fontSize: 16, height: 1.5),
           decoration: InputDecoration(
-            labelText: "New Password",
-            hintText: "Enter new password",
-            prefixIcon: Icon(Icons.lock_outline, color: theme.primaryColor),
+            labelText: l10n.newPasswordLabel,
+            hintText: l10n.newPasswordHint,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child:
+                  Icon(Icons.lock_outline, color: theme.primaryColor, size: 20),
+            ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey[300]!),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: theme.primaryColor, width: 2),
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: theme.primaryColor),
             ),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter new password';
+              return l10n.newPasswordEmpty;
             }
             if (value.length < 6) {
-              return 'Password must be at least 6 characters';
+              return l10n.newPasswordTooShort;
             }
             return null;
           },
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
         TextFormField(
           obscureText: true,
+          style: const TextStyle(fontSize: 16, height: 1.5),
           decoration: InputDecoration(
-            labelText: "Confirm Password",
-            hintText: "Confirm new password",
-            prefixIcon: Icon(Icons.lock_outline, color: theme.primaryColor),
+            labelText: l10n.confirmPasswordLabel,
+            hintText: l10n.confirmPasswordHint,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child:
+                  Icon(Icons.lock_outline, color: theme.primaryColor, size: 20),
+            ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey[300]!),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: theme.primaryColor, width: 2),
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: theme.primaryColor),
             ),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please confirm your password';
+              return l10n.confirmPasswordEmpty;
             }
             return null;
           },

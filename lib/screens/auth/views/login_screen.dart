@@ -67,93 +67,89 @@ class _LoginScreenState extends State<LoginScreen>
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0, top: 8.0),
-            child: Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.3),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+            child: PopupMenuButton<Locale>(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(
+                minWidth: 120,
+                maxWidth: 200,
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Text(
-                      '${L10n.getFlag(currentLocale.languageCode)} ${L10n.getLanguageName(currentLocale.languageCode)}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.3),
+                    width: 1,
                   ),
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: const BorderRadius.horizontal(
-                        right: Radius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Text(
+                        '${L10n.getFlag(currentLocale.languageCode)} ${L10n.getLanguageName(currentLocale.languageCode)}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                    child: PopupMenuButton<Locale>(
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: const BorderRadius.horizontal(
+                          right: Radius.circular(20),
+                        ),
+                      ),
+                      child: const Icon(
                         Icons.language_rounded,
                         color: Colors.white,
                         size: 20,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      position: PopupMenuPosition.under,
-                      elevation: 3,
-                      color: Colors.white.withOpacity(0.95),
-                      itemBuilder: (context) => L10n.all.map((locale) {
-                        final flag = L10n.getFlag(locale.languageCode);
-                        final name = L10n.getLanguageName(locale.languageCode);
-                        return PopupMenuItem(
-                          value: locale,
-                          child: Container(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(flag),
-                                const SizedBox(width: 12),
-                                Text(
-                                  name,
-                                  style: TextStyle(
-                                    color: theme.primaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
+                    ),
+                  ],
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              position: PopupMenuPosition.under,
+              elevation: 3,
+              color: Colors.white.withOpacity(0.95),
+              itemBuilder: (context) => L10n.all.map((locale) {
+                final flag = L10n.getFlag(locale.languageCode);
+                final name = L10n.getLanguageName(locale.languageCode);
+                return PopupMenuItem(
+                  value: locale,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(flag),
+                        const SizedBox(width: 12),
+                        Text(
+                          name,
+                          style: TextStyle(
+                            color: theme.primaryColor,
+                            fontWeight: FontWeight.w500,
                           ),
-                        );
-                      }).toList(),
-                      onSelected: (locale) {
-                        final provider =
-                            Provider.of<LocaleProvider>(context, listen: false);
-                        provider.setLocale(locale);
-                      },
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              }).toList(),
+              onSelected: (locale) {
+                final provider =
+                    Provider.of<LocaleProvider>(context, listen: false);
+                provider.setLocale(locale);
+              },
             ),
           ),
         ],

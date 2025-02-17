@@ -23,6 +23,9 @@ class _SignUpScreenState extends State<SignUpScreen>
   late Animation<double> _fadeAnimation;
   bool _acceptedTerms = false;
 
+  // 创建一个 key 用于访问 SignUpForm
+  final _signUpFormKey = GlobalKey<SignUpFormState>();
+
   @override
   void initState() {
     super.initState();
@@ -65,86 +68,89 @@ class _SignUpScreenState extends State<SignUpScreen>
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0, top: 8.0),
-            child: Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.3),
-                  width: 1,
-                ),
+            child: PopupMenuButton<Locale>(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(
+                minWidth: 120,
+                maxWidth: 200,
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Text(
-                      '${L10n.getFlag(currentLocale.languageCode)} ${L10n.getLanguageName(currentLocale.languageCode)}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.3),
+                    width: 1,
                   ),
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: const BorderRadius.horizontal(
-                        right: Radius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Text(
+                        '${L10n.getFlag(currentLocale.languageCode)} ${L10n.getLanguageName(currentLocale.languageCode)}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                    child: PopupMenuButton<Locale>(
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: const BorderRadius.horizontal(
+                          right: Radius.circular(20),
+                        ),
+                      ),
+                      child: const Icon(
                         Icons.language_rounded,
                         color: Colors.white,
                         size: 20,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      position: PopupMenuPosition.under,
-                      elevation: 3,
-                      color: Colors.white.withOpacity(0.95),
-                      itemBuilder: (context) => L10n.all.map((locale) {
-                        final flag = L10n.getFlag(locale.languageCode);
-                        final name = L10n.getLanguageName(locale.languageCode);
-                        return PopupMenuItem(
-                          value: locale,
-                          child: Container(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(flag),
-                                const SizedBox(width: 12),
-                                Text(
-                                  name,
-                                  style: TextStyle(
-                                    color: theme.primaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
+                    ),
+                  ],
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              position: PopupMenuPosition.under,
+              elevation: 3,
+              color: Colors.white.withOpacity(0.95),
+              itemBuilder: (context) => L10n.all.map((locale) {
+                final flag = L10n.getFlag(locale.languageCode);
+                final name = L10n.getLanguageName(locale.languageCode);
+                return PopupMenuItem(
+                  value: locale,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(flag),
+                        const SizedBox(width: 12),
+                        Text(
+                          name,
+                          style: TextStyle(
+                            color: theme.primaryColor,
+                            fontWeight: FontWeight.w500,
                           ),
-                        );
-                      }).toList(),
-                      onSelected: (locale) {
-                        final provider =
-                            Provider.of<LocaleProvider>(context, listen: false);
-                        provider.setLocale(locale);
-                      },
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              }).toList(),
+              onSelected: (locale) {
+                final provider =
+                    Provider.of<LocaleProvider>(context, listen: false);
+                provider.setLocale(locale);
+              },
             ),
           ),
         ],
@@ -216,7 +222,10 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                                 const SizedBox(height: 24),
 
-                                SignUpForm(formKey: _formKey),
+                                SignUpForm(
+                                  key: _signUpFormKey,
+                                  formKey: _formKey,
+                                ),
 
                                 const SizedBox(height: 16),
 
@@ -305,8 +314,19 @@ class _SignUpScreenState extends State<SignUpScreen>
                                         ? () {
                                             if (_formKey.currentState!
                                                 .validate()) {
-                                              Navigator.pushNamed(context,
-                                                  entryPointScreenRoute);
+                                              // 使用 key 获取 SignUpForm 的 state
+                                              _signUpFormKey.currentState
+                                                  ?.handleSignUp();
+                                            } else {
+                                              // 显示条款同意提示
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      l10n.pleaseAgreeTerms),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              );
                                             }
                                           }
                                         : null,
