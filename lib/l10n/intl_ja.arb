@@ -32,5 +32,13 @@
     "orders": "注文履歴",
     "helpAndSupport": "ヘルプとサポート",
     "getHelp": "サポート",
-    "faq": "よくある質問"
+    "faq": "よくある質問",
+    "profile": "プロフィール",
+    "phoneNumber": "電話番号",
+    "description": "自己紹介",
+    "address": "住所",
+    "city": "市区町村",
+    "state": "都道府県",
+    "postalCode": "郵便番号",
+    "country": "国"
 } 

@@ -42,7 +42,7 @@
     "checkout": "结算",
     
     "@_PROFILE": {},
-    "profile": "个人中心",
+    "profile": "个人资料",
     "settings": "设置",
     "language": "语言",
     "darkMode": "深色模式",
@@ -95,5 +95,11 @@
     "orders": "订单",
     "helpAndSupport": "帮助与支持",
     "getHelp": "获取帮助",
-    "faq": "常见问题"
+    "faq": "常见问题",
+    "phoneNumber": "手机号码",
+    "address": "地址",
+    "city": "城市",
+    "state": "州/省",
+    "postalCode": "邮编",
+    "country": "国家"
 } 

@@ -32,5 +32,13 @@
     "orders": "주문",
     "helpAndSupport": "도움말 및 지원",
     "getHelp": "도움말",
-    "faq": "자주 묻는 질문"
+    "faq": "자주 묻는 질문",
+    "profile": "프로필",
+    "phoneNumber": "전화번호",
+    "description": "소개",
+    "address": "주소",
+    "city": "시",
+    "state": "도",
+    "postalCode": "우편번호",
+    "country": "국가"
 } 

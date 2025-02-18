@@ -92,5 +92,11 @@
     "orders": "Orders",
     "helpAndSupport": "Help & Support",
     "getHelp": "Get Help",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "phoneNumber": "Phone Number",
+    "address": "Address",
+    "city": "City",
+    "state": "State",
+    "postalCode": "Postal Code",
+    "country": "Country"
 } 

@@ -32,5 +32,13 @@
     "orders": "Ordini",
     "helpAndSupport": "Aiuto e supporto",
     "getHelp": "Ottieni aiuto",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "profile": "Profilo",
+    "phoneNumber": "Numero di telefono",
+    "description": "Descrizione",
+    "address": "Indirizzo",
+    "city": "Città",
+    "state": "Stato/Provincia",
+    "postalCode": "Codice postale",
+    "country": "Paese"
 } 
