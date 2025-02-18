@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop/constants.dart';
 import 'package:shop/route/screen_export.dart';
 
+/// 应用程序的主入口点组件
+/// 管理底部导航栏和页面切换
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
 
@@ -12,17 +14,21 @@ class EntryPoint extends StatefulWidget {
 }
 
 class _EntryPointState extends State<EntryPoint> {
+  // 所有主要页面的列表
   final List _pages = const [
-    HomeScreen(),
-    DiscoverScreen(),
-    BookmarkScreen(),
-    ChatScreen(),
-    ProfileScreen(),
+    HomeScreen(), // 首页
+    DiscoverScreen(), // 发现页
+    BookmarkScreen(), // 收藏页
+    ChatScreen(), // 聊天页
+    ProfileScreen(), // 个人中心页
   ];
+
+  // 当前选中的页面索引
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    // 用于创建底部导航栏图标的辅助函数
     SvgPicture svgIcon(String src, {Color? color}) {
       return SvgPicture.asset(
         src,
@@ -36,114 +42,10 @@ class _EntryPointState extends State<EntryPoint> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
-        title: Row(
-          children: [
-            // 闲鱼图标
-            Icon(
-              Icons.sell_outlined,
-              size: 24,
-              color: Theme.of(context).primaryColor,
-            ),
-            const SizedBox(width: 12),
-
-            // 搜索框
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, searchScreenRoute);
-                },
-                child: Container(
-                  height: 36,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search,
-                        size: 18,
-                        color: Colors.grey.shade600,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '搜索',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          // 搜索按钮
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, searchScreenRoute);
-            },
-            icon: Icon(
-              Icons.search,
-              color: Colors.grey.shade700,
-              size: 22,
-            ),
-          ),
-          // 消息按钮
-          Stack(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, notificationsScreenRoute);
-                },
-                icon: Icon(
-                  Icons.chat_bubble_outline,
-                  color: Colors.grey.shade700,
-                  size: 22,
-                ),
-              ),
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      width: 1.5,
-                    ),
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 16,
-                    minHeight: 16,
-                  ),
-                  child: const Text(
-                    '2',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      // 主体内容区域
       body: PageTransitionSwitcher(
         duration: defaultDuration,
+        // 使用 FadeThroughTransition 实现页面切换动画
         transitionBuilder: (child, animation, secondAnimation) {
           return FadeThroughTransition(
             animation: animation,
@@ -153,13 +55,17 @@ class _EntryPointState extends State<EntryPoint> {
         },
         child: _pages[_currentIndex],
       ),
+
+      // 底部导航栏
       bottomNavigationBar: Container(
         padding: const EdgeInsets.only(top: defaultPadding / 2),
+        // 根据主题设置底部导航栏背景色
         color: Theme.of(context).brightness == Brightness.light
             ? Colors.white
             : const Color(0xFF101015),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
+          // 处理底部导航栏项目点击
           onTap: (index) {
             if (index != _currentIndex) {
               setState(() {
@@ -167,37 +73,42 @@ class _EntryPointState extends State<EntryPoint> {
               });
             }
           },
+          // 设置底部导航栏样式
           backgroundColor: Theme.of(context).brightness == Brightness.light
               ? Colors.white
               : const Color(0xFF101015),
           type: BottomNavigationBarType.fixed,
-          // selectedLabelStyle: TextStyle(color: primaryColor),
           selectedFontSize: 12,
           selectedItemColor: primaryColor,
           unselectedItemColor: Colors.transparent,
           items: [
+            // 首页导航项
             BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Shop.svg"),
               activeIcon: svgIcon("assets/icons/Shop.svg", color: primaryColor),
               label: "Shop",
             ),
+            // 发现页导航项
             BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Category.svg"),
               activeIcon:
                   svgIcon("assets/icons/Category.svg", color: primaryColor),
               label: "Discover",
             ),
+            // 收藏页导航项
             BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Bookmark.svg"),
               activeIcon:
                   svgIcon("assets/icons/Bookmark.svg", color: primaryColor),
               label: "Bookmark",
             ),
+            // 购物车导航项
             BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Bag.svg"),
               activeIcon: svgIcon("assets/icons/Bag.svg", color: primaryColor),
               label: "Cart",
             ),
+            // 个人中心导航项
             BottomNavigationBarItem(
               icon: svgIcon("assets/icons/Profile.svg"),
               activeIcon:

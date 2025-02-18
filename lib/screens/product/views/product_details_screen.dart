@@ -1,167 +1,166 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:shop/components/buy_full_ui_kit.dart';
-import 'package:shop/components/cart_button.dart';
-import 'package:shop/components/custom_modal_bottom_sheet.dart';
-import 'package:shop/components/product/product_card.dart';
-import 'package:shop/constants.dart';
-import 'package:shop/screens/product/views/product_returns_screen.dart';
-
-import 'package:shop/route/screen_export.dart';
-
+import 'package:dio/dio.dart';
+import '../../../components/buy_full_ui_kit.dart';
+import '../../../components/cart_button.dart';
+import '../../../components/custom_modal_bottom_sheet.dart';
+import '../../../components/product/product_card.dart';
+import '../../../constants.dart';
+import '../../../components/review_card.dart';
+import '../../../models/product_x_model.dart';
+import '../../../models/product_detail.dart';
+import '../../../services/product_service.dart';
+import '../../../utils/http_client.dart';
+import '../../../utils/storage.dart';
 import 'components/notify_me_card.dart';
 import 'components/product_images.dart';
 import 'components/product_info.dart';
 import 'components/product_list_tile.dart';
-import '../../../components/review_card.dart';
 import 'product_buy_now_screen.dart';
+import 'product_returns_screen.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
-  const ProductDetailsScreen({super.key, this.isProductAvailable = true});
+import 'package:shop/route/screen_export.dart';
 
-  final bool isProductAvailable;
+class ProductDetailsScreen extends StatefulWidget {
+  final int productId;
+
+  const ProductDetailsScreen({
+    Key? key,
+    required this.productId,
+  }) : super(key: key);
+
+  @override
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  late Future<ProductX> _productFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _productFuture = ProductService.getProductDetail(widget.productId);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: isProductAvailable
-          ? CartButton(
-              price: 140,
-              press: () {
-                customModalBottomSheet(
-                  context,
-                  height: MediaQuery.of(context).size.height * 0.92,
-                  child: const ProductBuyNowScreen(),
-                );
-              },
-            )
-          :
+      appBar: AppBar(
+        title: const Text('商品详情'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: FutureBuilder<ProductX>(
+        future: _productFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-          /// If profuct is not available then show [NotifyMeCard]
-          NotifyMeCard(
-              isNotify: false,
-              onChanged: (value) {},
-            ),
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              floating: true,
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset("assets/icons/Bookmark.svg",
-                      color: Theme.of(context).textTheme.bodyLarge!.color),
+          if (snapshot.hasError) {
+            return Center(child: Text('错误: ${snapshot.error}'));
+          }
+
+          if (!snapshot.hasData) {
+            return const Center(child: Text('没有找到商品'));
+          }
+
+          final product = snapshot.data!;
+
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ProductImages(
+                  images: [product.imageCover, ...?product.images],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product.productName,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '¥${product.price.toStringAsFixed(2)}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.favorite_border),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 80),
+                    ],
+                  ),
                 ),
               ],
             ),
-            const ProductImages(
-              images: [productDemoImg1, productDemoImg2, productDemoImg3],
+          );
+        },
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
             ),
-            ProductInfo(
-              brand: "LIPSY LONDON",
-              title: "Sleeveless Ruffle",
-              isAvailable: isProductAvailable,
-              description:
-                  "A cool gray cap in soft corduroy. Watch me.' By buying cotton products from Lindex, you’re supporting more responsibly...",
-              rating: 4.4,
-              numOfReviews: 126,
+          ],
+        ),
+        child: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.message),
+              onPressed: () {},
             ),
-            ProductListTile(
-              svgSrc: "assets/icons/Product.svg",
-              title: "Product Details",
-              press: () {
-                customModalBottomSheet(
-                  context,
-                  height: MediaQuery.of(context).size.height * 0.92,
-                  child: const BuyFullKit(
-                      images: ["assets/screens/Product detail.png"]),
-                );
-              },
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {},
             ),
-            ProductListTile(
-              svgSrc: "assets/icons/Delivery.svg",
-              title: "Shipping Information",
-              press: () {
-                customModalBottomSheet(
-                  context,
-                  height: MediaQuery.of(context).size.height * 0.92,
-                  child: const BuyFullKit(
-                    images: ["assets/screens/Shipping information.png"],
-                  ),
-                );
-              },
-            ),
-            ProductListTile(
-              svgSrc: "assets/icons/Return.svg",
-              title: "Returns",
-              isShowBottomBorder: true,
-              press: () {
-                customModalBottomSheet(
-                  context,
-                  height: MediaQuery.of(context).size.height * 0.92,
-                  child: const ProductReturnsScreen(),
-                );
-              },
-            ),
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(defaultPadding),
-                child: ReviewCard(
-                  rating: 4.3,
-                  numOfReviews: 128,
-                  numOfFiveStar: 80,
-                  numOfFourStar: 30,
-                  numOfThreeStar: 5,
-                  numOfTwoStar: 4,
-                  numOfOneStar: 1,
-                ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text('加入购物车'),
               ),
             ),
-            ProductListTile(
-              svgSrc: "assets/icons/Chat.svg",
-              title: "Reviews",
-              isShowBottomBorder: true,
-              press: () {
-                Navigator.pushNamed(context, productReviewsScreenRoute);
-              },
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.all(defaultPadding),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  "You may also like",
-                  style: Theme.of(context).textTheme.titleSmall!,
+            const SizedBox(width: 16),
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
                 ),
+                onPressed: () {},
+                child: const Text('立即购买'),
               ),
             ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(
-                        left: defaultPadding,
-                        right: index == 4 ? defaultPadding : 0),
-                    child: ProductCard(
-                      image: productDemoImg2,
-                      title: "Sleeveless Tiered Dobby Swing Dress",
-                      brandName: "LIPSY LONDON",
-                      price: 24.65,
-                      priceAfetDiscount: index.isEven ? 20.99 : null,
-                      dicountpercent: index.isEven ? 25 : null,
-                      press: () {},
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: defaultPadding),
-            )
           ],
         ),
       ),

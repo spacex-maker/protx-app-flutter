@@ -129,11 +129,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //     builder: (context) => const SetupFaceIdScreen(),
     //   );
     case productDetailsScreenRoute:
+      final productId = settings.arguments as int;
       return MaterialPageRoute(
-        builder: (context) {
-          bool isProductAvailable = settings.arguments as bool? ?? true;
-          return ProductDetailsScreen(isProductAvailable: isProductAvailable);
-        },
+        builder: (context) => ProductDetailsScreen(productId: productId),
       );
     case productReviewsScreenRoute:
       return MaterialPageRoute(

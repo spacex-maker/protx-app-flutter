@@ -20,8 +20,8 @@ class LogInForm extends StatefulWidget {
 }
 
 class _LogInFormState extends State<LogInForm> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController(text: 'TestAdmin');
+  final _passwordController = TextEditingController(text: '123456');
   bool _isLoading = false;
 
   Future<void> _handleLogin() async {

@@ -24,7 +24,8 @@
     "rememberMe": "记住我",
     "orSignInWith": "或通过以下方式登录",
 
-
+    "selectRegion": "选择地区",
+    "pleaseSelectCountry": "请选择国家/地区",
 
     "@_CATEGORIES": {},
     "categories": "分类",
@@ -101,5 +102,73 @@
     "city": "城市",
     "state": "州/省",
     "postalCode": "邮编",
-    "country": "国家"
+    "country": "国家",
+
+    "@_LOCATION": {},
+    "currentLocation": "当前定位",
+    "searchLocation": "搜索地区",
+    "recentLocations": "最近访问",
+    "allRegions": "全部地区",
+    "locationFormat": "{country} · {city}",
+    "@locationFormat": {
+        "placeholders": {
+            "country": {},
+            "city": {}
+        }
+    },
+    "regions": {
+        "china": "中国",
+        "usa": "美国",
+        "japan": "日本",
+        "korea": "韩国"
+    },
+    "cities": {
+        "beijing": "北京",
+        "shanghai": "上海",
+        "newyork": "纽约",
+        "tokyo": "东京",
+        "seoul": "首尔"
+    },
+
+    "countryChina": "中国",
+    "countryUSA": "美国",
+    "countryJapan": "日本",
+    "countryKorea": "韩国",
+    
+    "cityBeijing": "北京",
+    "cityShanghai": "上海",
+    "cityNewYork": "纽约",
+    "cityTokyo": "东京",
+    "citySeoul": "首尔",
+
+    "cityGuangzhou": "广州",
+    "cityShenzhen": "深圳",
+    "cityHangzhou": "杭州",
+    "cityChengdu": "成都",
+    "cityWuhan": "武汉",
+    "cityXian": "西安",
+    "cityNanjing": "南京",
+    "cityChongqing": "重庆",
+    
+    "cityLosAngeles": "洛杉矶",
+    "cityChicago": "芝加哥",
+    "citySanFrancisco": "旧金山",
+    "citySeattle": "西雅图",
+    "cityBoston": "波士顿",
+    "cityMiami": "迈阿密",
+    "cityLasVegas": "拉斯维加斯",
+    
+    "cityOsaka": "大阪",
+    "cityNagoya": "名古屋",
+    "citySapporo": "札幌",
+    "cityFukuoka": "福冈",
+    "cityKobe": "神户",
+    "cityKyoto": "京都",
+    
+    "cityBusan": "釜山",
+    "cityIncheon": "仁川",
+    "cityDaegu": "大邱",
+    "cityGwangju": "光州",
+    "cityDaejeon": "大田",
+    "cityUlsan": "蔚山"
 } 

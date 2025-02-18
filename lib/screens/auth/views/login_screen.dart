@@ -23,11 +23,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-  bool _isPasswordVisible = false;
+  final _usernameController = TextEditingController(text: 'TestAdmin'); // 默认用户名
+  final _passwordController = TextEditingController(text: '123456'); // 默认密码
+  bool _isObscure = true;
   bool _rememberMe = false;
 
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+
+  // 定义输入框边框样式
+  final outlineInputBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(defaultBorderRadious),
+    borderSide: const BorderSide(color: Colors.black12),
+  );
 
   @override
   void initState() {
@@ -50,6 +58,8 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void dispose() {
     _animationController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -217,65 +227,8 @@ class _LoginScreenState extends State<LoginScreen>
 
                                 const SizedBox(height: 24),
 
-                                // 登录表单
+                                // 使用 LogInForm 组件
                                 LogInForm(formKey: _formKey),
-
-                                const SizedBox(height: 16),
-
-                                // 记住我和忘记密码
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          height: 24,
-                                          width: 24,
-                                          child: Checkbox(
-                                            value: _rememberMe,
-                                            onChanged: (value) {
-                                              setState(
-                                                  () => _rememberMe = value!);
-                                            },
-                                            fillColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.white),
-                                            checkColor: theme.primaryColor,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          l10n.rememberMe,
-                                          style: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.9),
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const PasswordRecoveryScreen(),
-                                          ),
-                                        );
-                                      },
-                                      child: Text(
-                                        l10n.forgotPassword,
-                                        style: TextStyle(
-                                          color: Colors.white.withOpacity(0.9),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
 
                                 const SizedBox(height: 24),
 
