@@ -30,7 +30,7 @@ class ProductService {
       };
 
       final response = await HttpClient.get(
-        '/user-product/list',
+        '/productx/user-product/list',
         queryParameters: queryParameters,
       );
 
@@ -49,7 +49,7 @@ class ProductService {
       final token = await Storage.getToken();
 
       final response = await HttpClient.post(
-        '/user-product/detail',
+        '/productx/user-product/detail',
         data: {"productId": productId},
         options: Options(
           headers: {

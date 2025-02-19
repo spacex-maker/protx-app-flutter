@@ -228,7 +228,12 @@ class _LoginScreenState extends State<LoginScreen>
                                 const SizedBox(height: 24),
 
                                 // 使用 LogInForm 组件
-                                LogInForm(formKey: _formKey),
+                                LogInForm(
+                                  formKey: _formKey,
+                                  onLoginSuccess: () {
+                                    // 这里不需要做任何事情，因为跳转已经在 LogInForm 中处理了
+                                  },
+                                ),
 
                                 const SizedBox(height: 24),
 

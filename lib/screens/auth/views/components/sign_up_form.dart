@@ -47,7 +47,7 @@ class SignUpFormState extends State<SignUpForm> {
       try {
         // 调用注册 API
         final response = await HttpClient.post(
-          '/user/register',
+          '/productx/user/register',
           data: {
             'username': _usernameController.text,
             'password': _passwordController.text,
@@ -160,22 +160,13 @@ class SignUpFormState extends State<SignUpForm> {
             enabled: !_isLoading,
             decoration: InputDecoration(
               hintText: l10n.username,
-              prefixIcon: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: defaultPadding * 0.75),
-                child: SvgPicture.asset(
-                  "assets/icons/User.svg",
-                  height: 24,
-                  width: 24,
-                  colorFilter: ColorFilter.mode(
-                    Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .color!
-                        .withOpacity(0.3),
-                    BlendMode.srcIn,
-                  ),
-                ),
+              prefixIcon: Icon(
+                Icons.person_outline,
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .color!
+                    .withOpacity(0.3),
               ),
             ),
             validator: (value) {

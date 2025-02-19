@@ -11,9 +11,11 @@ class LogInForm extends StatefulWidget {
   const LogInForm({
     super.key,
     required this.formKey,
+    required this.onLoginSuccess,
   });
 
   final GlobalKey<FormState> formKey;
+  final VoidCallback onLoginSuccess;
 
   @override
   State<LogInForm> createState() => _LogInFormState();
@@ -33,7 +35,7 @@ class _LogInFormState extends State<LogInForm> {
     try {
       // 1. 登录获取token
       final loginResponse = await HttpClient.post(
-        '/user/login',
+        '/productx/user/login',
         data: {
           'username': _usernameController.text,
           'password': _passwordController.text,
@@ -53,7 +55,7 @@ class _LogInFormState extends State<LogInForm> {
 
         // 2. 获取用户信息
         final userResponse = await HttpClient.get(
-          '/user/user-detail',
+          '/productx/user/user-detail',
           options: Options(
             headers: {
               'Authorization': 'Bearer $token',
@@ -76,8 +78,12 @@ class _LogInFormState extends State<LogInForm> {
             ),
           );
 
-          // 跳转到主页
-          Navigator.pushReplacementNamed(context, entryPointScreenRoute);
+          // 修改这里：使用正确的路由名称
+          Navigator.pushReplacementNamed(
+              context, entryPointScreenRoute); // 使用 entryPointScreenRoute
+
+          // 触发登录成功回调
+          widget.onLoginSuccess();
         } else {
           throw Exception(
               userResponse.data['message'] ?? 'Failed to get user info');
@@ -160,19 +166,15 @@ class _LogInFormState extends State<LogInForm> {
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 hintText: l10n.username,
-                hintStyle: TextStyle(color: Colors.grey[400]),
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: SvgPicture.asset(
-                    "assets/icons/User.svg",
-                    height: 24,
-                    width: 24,
-                    colorFilter: ColorFilter.mode(
-                      theme.primaryColor.withOpacity(0.7),
-                      BlendMode.srcIn,
-                    ),
-                  ),
+                prefixIcon: Icon(
+                  Icons.person_outline,
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .color!
+                      .withOpacity(0.3),
                 ),
+                hintStyle: TextStyle(color: Colors.grey[400]),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,

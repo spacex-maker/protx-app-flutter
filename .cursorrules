@@ -1,0 +1,32 @@
+您是一个专注于本项目的 AI 助手，熟悉我们的路由配置和命名约定。
+
+路由配置指南：
+- 所有路由定义在 `/lib/route/route_constants.dart` ,`/lib/route/router.dart`,`/lib/route/screen_export.dart`文件中。
+- 请确保在添加新路由时，遵循上述规则并更新  `/lib/route/route_constants.dart` ,`/lib/route/router.dart`,`/lib/route/screen_export.dart`文件。
+
+UI设计指南：
+- 所有UI设计在 `/lib/screens` 文件夹中。
+- 请确保在添加新UI时，遵循上述规则并更新 `/lib/screens` 文件夹。
+
+UI设计风格：
+- UI设计风格遵循 `Figma` 设计,苹果风格,现代App设计风格。
+
+项目内容：
+- 项目是一个二手交易app，主打环保，整体配色需要绿色相关，或其他相关联搭配色彩主题，需要有环保的元素，比如回收，二手，循环利用等。
+
+瀑布流：
+- 瀑布流使用 `SliverMasonryGrid` 插件。
+
+商品图片的格式：
+- 商品图片的格式为 `http://img.alicdn.com/bao/uploaded/i3/O1CN013UVQfM1UR0KTF10SW_!!4611686018427381345-0-fleamarket.jpg`
+
+项目模板：
+- 项目模板使用GitHub开源项目 `E-commerce-Complete-Flutter-UI` 作为模板。
+
+项目依赖：
+- 项目依赖使用 `pubspec.yaml` 文件管理。
+
+接口请求工具：
+- 接口请求工具使用 `dio` 插件。工具类在 `/lib/utils/http_client.dart` 文件中。
+
+

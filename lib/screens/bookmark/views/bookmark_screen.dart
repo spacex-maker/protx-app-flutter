@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../components/product/product_card.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../../../constants.dart';
 import '../../../models/product_x_model.dart';
 import '../../../services/product_service.dart';
+import '../../../widgets/product_card.dart';
 
 class BookmarkScreen extends StatelessWidget {
   const BookmarkScreen({Key? key}) : super(key: key);
@@ -45,5 +47,9 @@ class BookmarkScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget _buildProductCard(ProductX product) {
+    return ProductCard(product: product);
   }
 }

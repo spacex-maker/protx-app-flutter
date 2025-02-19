@@ -11,7 +11,7 @@
     "createAccount": "创建账号",
     "fullName": "姓名",
     "confirmPassword": "确认密码",
-    "agreeToTerms": "我同意服务条款和隐私政策",
+    "agreeToTerms": "我同意",
     "alreadyHaveAccount": "已有账号？",
     "login": "登录",
     "signUp": "注册",

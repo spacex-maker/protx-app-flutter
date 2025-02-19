@@ -6,6 +6,8 @@ import 'components/home_recommend_products.dart';
 import 'components/home_category_nav.dart';
 import 'components/location_picker.dart';
 
+/// 首页屏幕组件
+/// 包含搜索栏、分类导航、推荐商品等内容
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -14,8 +16,46 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // 当前选择的地区
   String _currentLocation = '选择地区';
+  // 滚动控制器，用于监听滚动位置实现无限加载
+  final ScrollController _scrollController = ScrollController();
+  // 添加 key 用于获取 HomeRecommendProducts 的状态
+  final _recommendProductsKey = GlobalKey<HomeRecommendProductsState>();
 
+  @override
+  void initState() {
+    super.initState();
+    // 添加滚动监听器
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    // 清理滚动控制器
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  /// 滚动事件处理
+  /// 当滚动到接近底部时，触发加载更多数据
+  void _onScroll() {
+    // 通过 key 获取 HomeRecommendProducts 的状态
+    final homeRecommendProductsState = _recommendProductsKey.currentState;
+
+    if (homeRecommendProductsState != null) {
+      // 当滚动到距离底部200像素，且不在加载中，且还有更多数据时
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 200 &&
+          !homeRecommendProductsState.isLoading &&
+          homeRecommendProductsState.hasMore) {
+        // 触发加载更多数据
+        homeRecommendProductsState.loadProducts();
+      }
+    }
+  }
+
+  /// 显示地区选择器
   void _showLocationPicker() {
     showModalBottomSheet(
       context: context,
@@ -41,6 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
       ),
       body: CustomScrollView(
+        // 使用滚动控制器监听整个页面的滚动
+        controller: _scrollController,
         slivers: [
           // 分类导航
           const SliverToBoxAdapter(
@@ -85,8 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // 推荐商品列表
-          const HomeRecommendProducts(),
+          // 推荐商品列表，添加 key
+          HomeRecommendProducts(key: _recommendProductsKey),
         ],
       ),
       floatingActionButton: FloatingActionButton(

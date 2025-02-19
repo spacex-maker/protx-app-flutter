@@ -4,20 +4,38 @@ import '../../../../constants.dart';
 import '../../../../models/product_x_model.dart';
 import '../../../../services/product_service.dart';
 import '../../../../route/screen_export.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import '../../../../widgets/product_card.dart';
 
+/// 首页推荐商品列表组件
+/// 使用瀑布流布局展示商品列表，支持分页加载和错误处理
+/// 通过 [ProductService] 获取商品数据
 class HomeRecommendProducts extends StatefulWidget {
   const HomeRecommendProducts({super.key});
 
   @override
-  State<HomeRecommendProducts> createState() => _HomeRecommendProductsState();
+  HomeRecommendProductsState createState() => HomeRecommendProductsState();
 }
 
-class _HomeRecommendProductsState extends State<HomeRecommendProducts> {
+/// 推荐商品列表的状态管理类
+/// 负责处理商品数据的加载、分页和错误状态
+class HomeRecommendProductsState extends State<HomeRecommendProducts> {
+  /// 存储已加载的商品列表数据
   final List<ProductX> _products = [];
+
+  /// 标记是否正在加载数据
   bool _isLoading = false;
+
+  /// 标记是否还有更多数据可以加载
   bool _hasMore = true;
+
+  /// 标记是否发生加载错误
   bool _hasError = false;
+
+  /// 存储错误信息，用于显示给用户
   String _errorMessage = '';
+
+  /// 当前页码，用于分页加载
   int _currentPage = 1;
 
   @override
@@ -26,6 +44,11 @@ class _HomeRecommendProductsState extends State<HomeRecommendProducts> {
     _loadProducts();
   }
 
+  /// 加载商品数据
+  ///
+  /// 如果正在加载或没有更多数据，则直接返回
+  /// 加载成功时会更新商品列表和分页信息
+  /// 加载失败时会设置错误状态和错误信息
   Future<void> _loadProducts() async {
     if (_isLoading || !_hasMore) return;
 
@@ -55,8 +78,20 @@ class _HomeRecommendProductsState extends State<HomeRecommendProducts> {
     }
   }
 
+  /// 对外暴露的加载方法，供父组件调用
+  Future<void> loadProducts() async {
+    await _loadProducts();
+  }
+
+  /// 获取当前是否正在加载
+  bool get isLoading => _isLoading;
+
+  /// 获取是否还有更多数据
+  bool get hasMore => _hasMore;
+
   @override
   Widget build(BuildContext context) {
+    // 处理空状态显示
     if (_products.isEmpty) {
       if (_hasError) {
         return _buildErrorView();
@@ -66,6 +101,7 @@ class _HomeRecommendProductsState extends State<HomeRecommendProducts> {
       }
     }
 
+    // 使用瀑布流布局展示商品列表
     return SliverPadding(
       padding: const EdgeInsets.all(defaultPadding),
       sliver: SliverMasonryGrid.count(
@@ -83,6 +119,8 @@ class _HomeRecommendProductsState extends State<HomeRecommendProducts> {
     );
   }
 
+  /// 构建错误视图
+  /// 显示错误图标、错误信息和重试按钮
   Widget _buildErrorView() {
     return SliverToBoxAdapter(
       child: Center(
@@ -110,6 +148,8 @@ class _HomeRecommendProductsState extends State<HomeRecommendProducts> {
     );
   }
 
+  /// 构建加载中视图
+  /// 显示居中的加载指示器
   Widget _buildLoadingView() {
     return const SliverToBoxAdapter(
       child: Center(
@@ -121,6 +161,11 @@ class _HomeRecommendProductsState extends State<HomeRecommendProducts> {
     );
   }
 
+  /// 构建底部加载指示器或错误提示
+  /// 根据当前状态显示不同的内容：
+  /// - 错误状态：显示错误信息和重试按钮
+  /// - 加载中：显示加载指示器
+  /// - 没有更多数据：显示"到底了"文本
   Widget _buildLoadingIndicator() {
     if (_hasError) {
       return Padding(
@@ -150,121 +195,10 @@ class _HomeRecommendProductsState extends State<HomeRecommendProducts> {
     );
   }
 
+  /// 构建商品卡片
+  /// 显示商品图片、名称、价格等信息
+  /// 点击时跳转到商品详情页
   Widget _buildProductCard(ProductX product) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          productDetailsScreenRoute,
-          arguments: product.id,
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(defaultBorderRadious),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 商品图片
-            AspectRatio(
-              aspectRatio: 1,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(defaultBorderRadious),
-                ),
-                child: Image.network(
-                  product.imageCover,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Center(
-                      child: Icon(
-                        Icons.error_outline,
-                        size: 40,
-                        color: Colors.red,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            // 商品信息
-            Padding(
-              padding: const EdgeInsets.all(defaultPadding / 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.productName,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: defaultPadding / 4),
-                  Text(
-                    "¥${product.price.toStringAsFixed(2)}",
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: defaultPadding / 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            size: 12,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            product.city,
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '浏览 ${product.viewCount}',
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return ProductCard(product: product);
   }
 }

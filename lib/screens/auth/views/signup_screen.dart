@@ -277,7 +277,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                                       ..onTap = () {
                                                         Navigator.pushNamed(
                                                             context,
-                                                            termsOfServicesScreenRoute);
+                                                            termsConditionsScreenRoute);
                                                       },
                                               ),
                                               TextSpan(text: " ${l10n.and} "),
@@ -292,7 +292,9 @@ class _SignUpScreenState extends State<SignUpScreen>
                                                 recognizer:
                                                     TapGestureRecognizer()
                                                       ..onTap = () {
-                                                        // Add privacy policy navigation
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            privacyPolicyScreenRoute);
                                                       },
                                               ),
                                             ],

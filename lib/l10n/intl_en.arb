@@ -11,7 +11,7 @@
     "createAccount": "Create Account",
     "fullName": "Full Name",
     "confirmPassword": "Confirm Password",
-    "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
+    "agreeToTerms": "I agree to",
     "alreadyHaveAccount": "Already have an account?",
     "login": "Login",
     "signUp": "Sign Up",

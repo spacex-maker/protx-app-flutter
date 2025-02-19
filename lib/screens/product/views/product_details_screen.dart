@@ -1,24 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import '../../../components/buy_full_ui_kit.dart';
-import '../../../components/cart_button.dart';
-import '../../../components/custom_modal_bottom_sheet.dart';
-import '../../../components/product/product_card.dart';
-import '../../../constants.dart';
-import '../../../components/review_card.dart';
 import '../../../models/product_x_model.dart';
-import '../../../models/product_detail.dart';
 import '../../../services/product_service.dart';
-import '../../../utils/http_client.dart';
-import '../../../utils/storage.dart';
-import 'components/notify_me_card.dart';
-import 'components/product_images.dart';
-import 'components/product_info.dart';
-import 'components/product_list_tile.dart';
-import 'product_buy_now_screen.dart';
-import 'product_returns_screen.dart';
-
-import 'package:shop/route/screen_export.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final int productId;
@@ -34,6 +17,7 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late Future<ProductX> _productFuture;
+  ProductX? _product;
 
   @override
   void initState() {
@@ -44,8 +28,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text('商品详情'),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
@@ -69,96 +55,171 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           }
 
           final product = snapshot.data!;
+          _product = product;
 
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ProductImages(
-                  images: [product.imageCover, ...?product.images],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.productName,
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  '¥${product.price.toStringAsFixed(2)}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.favorite_border),
-                            onPressed: () {},
-                          ),
-                        ],
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: CachedNetworkImage(
+                    imageUrl: _product?.images?.firstOrNull ??
+                        'https://via.placeholder.com/400',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(
+                        Icons.error_outline,
+                        size: 50,
+                        color: Colors.grey,
                       ),
-                      const SizedBox(height: 80),
-                    ],
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildPriceSection(product),
+                    _buildProductInfo(product),
+                    _buildSellerInfo(product),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+      bottomNavigationBar: _buildBottomBar(),
+    );
+  }
+
+  Widget _buildPriceSection(ProductX product) {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '¥${product.price.toStringAsFixed(2)}',
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          if (product.originalPrice > product.price)
+            Text(
+              '¥${product.originalPrice.toStringAsFixed(2)}',
+              style: const TextStyle(
+                decoration: TextDecoration.lineThrough,
+                color: Colors.grey,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductInfo(ProductX product) {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            product.productName,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            product.productDescription ?? '暂无描述',
+            style: const TextStyle(color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSellerInfo(ProductX product) {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundImage: NetworkImage(
+              product.avatar ?? 'https://via.placeholder.com/48',
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                product.username ?? '未知用户',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                product.city ?? '未知地区',
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    return SafeArea(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withOpacity(0.05),
               blurRadius: 10,
-              offset: const Offset(0, -5),
             ),
           ],
         ),
         child: Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.message),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.shopping_cart),
-              onPressed: () {},
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('加入购物车'),
+              icon: Icon(
+                Icons.favorite,
+                color: _product?.isFavorite == true
+                    ? Colors.red
+                    : Colors.grey[400],
               ),
+              onPressed: () {},
             ),
             const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor: Colors.red,
                 ),
                 onPressed: () {},
-                child: const Text('立即购买'),
+                child: const Text(
+                  '立即购买',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
               ),
             ),
           ],

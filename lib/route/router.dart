@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shop/entry_point.dart';
 
 import 'screen_export.dart';
+import '../screens/policy/privacy_policy_screen.dart';
+import '../screens/policy/terms_conditions_screen.dart';
 
 // Yuo will get 50+ screens and more once you have the full template
 // 🔗 Full template: https://theflutterway.gumroad.com/l/fluttershop
@@ -297,6 +299,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //   return MaterialPageRoute(
     //     builder: (context) => const ThanksForOrderScreen(),
     //   );
+    case privacyPolicyScreenRoute:
+      return MaterialPageRoute(
+        builder: (_) => const PrivacyPolicyScreen(),
+      );
+    case termsConditionsScreenRoute:
+      return MaterialPageRoute(
+        builder: (_) => const TermsConditionsScreen(),
+      );
     default:
       return MaterialPageRoute(
         // Make a screen for undefine
