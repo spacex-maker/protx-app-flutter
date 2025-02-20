@@ -81,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
       ),
       body: CustomScrollView(
-        // 使用滚动控制器监听整个页面的滚动
         controller: _scrollController,
         slivers: [
           // 分类导航
@@ -127,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // 推荐商品列表，添加 key
+          // 推荐商品列表
           HomeRecommendProducts(key: _recommendProductsKey),
         ],
       ),

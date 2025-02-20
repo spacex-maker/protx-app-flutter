@@ -4,9 +4,24 @@ import '../../../constants.dart';
 import '../../../models/product_x_model.dart';
 import '../../../services/product_service.dart';
 import '../../../widgets/product_card.dart';
+import '../../../models/product_list_item.dart';
+import '../../../widgets/product_list_card.dart';
 
-class BookmarkScreen extends StatelessWidget {
+class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({Key? key}) : super(key: key);
+
+  @override
+  _BookmarkScreenState createState() => _BookmarkScreenState();
+}
+
+class _BookmarkScreenState extends State<BookmarkScreen> {
+  Future<List<ProductListItem>>? _productsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _productsFuture = ProductService.getProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +29,8 @@ class BookmarkScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('收藏夹'),
       ),
-      body: FutureBuilder<List<ProductX>>(
-        future: ProductService.getProducts(), // 这里应该改成获取收藏商品的接口
+      body: FutureBuilder<List<ProductListItem>>(
+        future: _productsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -41,15 +56,11 @@ class BookmarkScreen extends StatelessWidget {
             ),
             itemCount: products.length,
             itemBuilder: (context, index) {
-              return ProductCard(product: products[index]);
+              return ProductListCard(product: products[index]);
             },
           );
         },
       ),
     );
-  }
-
-  Widget _buildProductCard(ProductX product) {
-    return ProductCard(product: product);
   }
 }

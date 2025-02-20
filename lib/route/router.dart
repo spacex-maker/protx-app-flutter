@@ -4,6 +4,7 @@ import 'package:shop/entry_point.dart';
 import 'screen_export.dart';
 import '../screens/policy/privacy_policy_screen.dart';
 import '../screens/policy/terms_conditions_screen.dart';
+import '../screens/cart/cart_screen.dart';
 
 // Yuo will get 50+ screens and more once you have the full template
 // 🔗 Full template: https://theflutterway.gumroad.com/l/fluttershop
@@ -38,7 +39,6 @@ import '../screens/policy/terms_conditions_screen.dart';
 // ProductReviewsScreen()
 // SizeGuideScreen()
 // BrandScreen()
-// CartScreen()
 // EmptyCartScreen()
 // PaymentMethodScreen()
 // ThanksForOrderScreen()
@@ -275,14 +275,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //   return MaterialPageRoute(
     //     builder: (context) => const EmptyPaymentScreen(),
     //   );
-    case emptyWalletScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const EmptyWalletScreen(),
-      );
-    case walletScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const WalletScreen(),
-      );
     case cartScreenRoute:
       return MaterialPageRoute(
         builder: (context) => const CartScreen(),

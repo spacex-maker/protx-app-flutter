@@ -88,5 +88,14 @@
     "cityDaegu": "Daegu",
     "cityGwangju": "Gwangju",
     "cityDaejeon": "Daejeon",
-    "cityUlsan": "Ulsan"
+    "cityUlsan": "Ulsan",
+    "@_PRODUCT": {},
+    "addToCart": "Ajouter au Panier",
+    "addToCartSuccess": "Ajouté au Panier",
+    "addToCartFailed": "Échec de l'Ajout au Panier",
+    "viewCart": "Voir le Panier",
+    "quantity": "Quantité",
+    "stock": "Stock",
+    "outOfStock": "Rupture de Stock",
+    "productDetails": "Détails du Produit"
 } 

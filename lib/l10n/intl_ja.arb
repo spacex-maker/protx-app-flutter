@@ -88,5 +88,14 @@
     "cityDaegu": "大邱",
     "cityGwangju": "光州",
     "cityDaejeon": "大田",
-    "cityUlsan": "蔚山"
+    "cityUlsan": "蔚山",
+    "@_PRODUCT": {},
+    "addToCart": "カートに追加",
+    "addToCartSuccess": "カートに追加しました",
+    "addToCartFailed": "カートに追加できませんでした",
+    "viewCart": "カートを見る",
+    "quantity": "数量",
+    "stock": "在庫",
+    "outOfStock": "在庫切れ",
+    "productDetails": "商品詳細"
 } 

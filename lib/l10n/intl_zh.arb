@@ -33,6 +33,13 @@
     
     "@_PRODUCT": {},
     "addToCart": "加入购物车",
+    "addToCartSuccess": "已加入购物车",
+    "addToCartFailed": "加入购物车失败",
+    "viewCart": "查看购物车",
+    "quantity": "数量",
+    "stock": "库存",
+    "outOfStock": "暂时缺货",
+    "productDetails": "商品详情",
     "buyNow": "立即购买",
     "description": "商品描述",
     "reviews": "评价",

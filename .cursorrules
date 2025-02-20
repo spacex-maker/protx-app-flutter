@@ -29,4 +29,12 @@ UI设计风格：
 接口请求工具：
 - 接口请求工具使用 `dio` 插件。工具类在 `/lib/utils/http_client.dart` 文件中。
 
+获取token的代码：
+- 获取token的代码在 `/lib/utils/storage.dart` 文件中。
+
+获取用户信息的代码：
+- 获取用户信息的代码在 `/lib/utils/storage.dart` 文件中。
+
+
+
 

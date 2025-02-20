@@ -24,6 +24,13 @@
     
     "@_PRODUCT": {},
     "addToCart": "Add to Cart",
+    "addToCartSuccess": "Added to Cart",
+    "addToCartFailed": "Failed to Add to Cart",
+    "viewCart": "View Cart",
+    "quantity": "Quantity",
+    "stock": "Stock",
+    "outOfStock": "Out of Stock",
+    "productDetails": "Product Details",
     "buyNow": "Buy Now",
     "description": "Description",
     "reviews": "Reviews",

@@ -5,6 +5,8 @@ import '../../../models/product_x_model.dart';
 import '../../../services/product_service.dart';
 import '../../../route/route_constants.dart';
 import '../../../widgets/product_card.dart';
+import '../../../models/product_list_item.dart';
+import '../../../widgets/product_list_card.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -19,7 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final ScrollController _scrollController = ScrollController();
 
   // 搜索结果相关状态
-  final List<ProductX> _products = [];
+  final List<ProductListItem> _products = [];
   bool _isLoading = false;
   bool _hasMore = true;
   bool _hasError = false;
@@ -394,10 +396,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     return const SizedBox();
                   }
                   // 为每个 ProductCard 添加唯一的 key
-                  return ProductCard(
-                    key: ValueKey('product_${_products[index].id}'),
-                    product: _products[index],
-                  );
+                  return ProductListCard(product: _products[index]);
                 },
                 childCount:
                     _products.length + (_isLoading || _hasError ? 1 : 0),
@@ -498,9 +497,5 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
-  }
-
-  Widget _buildProductCard(ProductX product) {
-    return ProductCard(product: product);
   }
 }

@@ -88,5 +88,14 @@
     "cityDaegu": "Тэгу",
     "cityGwangju": "Кванджу",
     "cityDaejeon": "Тэджон",
-    "cityUlsan": "Ульсан"
+    "cityUlsan": "Ульсан",
+    "@_PRODUCT": {},
+    "addToCart": "В Корзину",
+    "addToCartSuccess": "Добавлено в Корзину",
+    "addToCartFailed": "Ошибка Добавления",
+    "viewCart": "Перейти в Корзину",
+    "quantity": "Количество",
+    "stock": "В наличии",
+    "outOfStock": "Нет в наличии",
+    "productDetails": "Описание товара"
 } 

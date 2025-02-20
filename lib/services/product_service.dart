@@ -1,11 +1,12 @@
 import '../models/product_x_model.dart';
+import '../models/product_list_item.dart';
 import '../utils/http_client.dart';
 import '../utils/storage.dart';
 import 'package:http/http.dart';
 import 'package:dio/dio.dart';
 
 class ProductService {
-  static Future<List<ProductX>> getProducts({
+  static Future<List<ProductListItem>> getProducts({
     String? searchKey,
     double? priceUp,
     double? priceDown,
@@ -36,7 +37,9 @@ class ProductService {
 
       if (response.data['success'] == true) {
         final List<dynamic> productsJson = response.data['data']['data'];
-        return productsJson.map((json) => ProductX.fromJson(json)).toList();
+        return productsJson
+            .map((json) => ProductListItem.fromJson(json))
+            .toList();
       }
       throw Exception('加载商品失败');
     } catch (e) {

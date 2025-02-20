@@ -1,4 +1,4 @@
-class ProductX {
+class ProductListItem {
   final String createTime;
   final String updateTime;
   final int id;
@@ -14,14 +14,10 @@ class ProductX {
   final String category;
   final String imageCover;
   final int viewCount;
-  final String? username;
-  final String? avatar;
-  final List<String> imageList;
   bool isFavorite;
-  final List<String>? images;
-  final List<Review>? reviews;
+  // ... 列表页需要的其他字段
 
-  ProductX({
+  ProductListItem({
     required this.createTime,
     required this.updateTime,
     required this.id,
@@ -37,16 +33,11 @@ class ProductX {
     required this.category,
     required this.imageCover,
     required this.viewCount,
-    this.username,
-    this.avatar,
-    this.imageList = const [],
     this.isFavorite = false,
-    this.images,
-    this.reviews,
   });
 
-  factory ProductX.fromJson(Map<String, dynamic> json) {
-    return ProductX(
+  factory ProductListItem.fromJson(Map<String, dynamic> json) {
+    return ProductListItem(
       createTime: json['createTime'],
       updateTime: json['updateTime'],
       id: json['id'],
@@ -62,47 +53,7 @@ class ProductX {
       category: json['category'],
       imageCover: json['imageCover'],
       viewCount: json['viewCount'],
-      username: json['username'],
-      avatar: json['avatar'],
-      imageList:
-          json['imageList'] != null ? List<String>.from(json['imageList']) : [],
       isFavorite: json['isFavorite'] ?? false,
-      images: json['images'] != null ? List<String>.from(json['images']) : null,
-      reviews: json['reviews'] != null
-          ? List<Review>.from(json['reviews'].map((x) => Review.fromJson(x)))
-          : null,
-    );
-  }
-}
-
-class Review {
-  final String id;
-  final String content;
-  final double rating;
-  final String userId;
-  final String username;
-  final String? userAvatar;
-  final DateTime createdAt;
-
-  Review({
-    required this.id,
-    required this.content,
-    required this.rating,
-    required this.userId,
-    required this.username,
-    this.userAvatar,
-    required this.createdAt,
-  });
-
-  factory Review.fromJson(Map<String, dynamic> json) {
-    return Review(
-      id: json['id'],
-      content: json['content'],
-      rating: json['rating'].toDouble(),
-      userId: json['userId'],
-      username: json['username'],
-      userAvatar: json['userAvatar'],
-      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 }

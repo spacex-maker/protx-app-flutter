@@ -88,5 +88,14 @@
     "cityDaegu": "대구",
     "cityGwangju": "광주",
     "cityDaejeon": "대전",
-    "cityUlsan": "울산"
+    "cityUlsan": "울산",
+    "@_PRODUCT": {},
+    "addToCart": "장바구니에 담기",
+    "addToCartSuccess": "장바구니에 담았습니다",
+    "addToCartFailed": "장바구니에 담지 못했습니다",
+    "viewCart": "장바구니 보기",
+    "quantity": "수량",
+    "stock": "재고",
+    "outOfStock": "품절",
+    "productDetails": "상품 상세"
 } 

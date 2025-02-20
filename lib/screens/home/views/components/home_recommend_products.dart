@@ -6,6 +6,8 @@ import '../../../../services/product_service.dart';
 import '../../../../route/screen_export.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../widgets/product_card.dart';
+import '../../../../models/product_list_item.dart';
+import '../../../../widgets/product_list_card.dart';
 
 /// 首页推荐商品列表组件
 /// 使用瀑布流布局展示商品列表，支持分页加载和错误处理
@@ -21,35 +23,46 @@ class HomeRecommendProducts extends StatefulWidget {
 /// 负责处理商品数据的加载、分页和错误状态
 class HomeRecommendProductsState extends State<HomeRecommendProducts> {
   /// 存储已加载的商品列表数据
-  final List<ProductX> _products = [];
+  /// 使用 [ProductListItem] 模型，包含商品的基本信息
+  /// 不包含详情页特有的信息（如收藏状态、评论等）
+  final List<ProductListItem> _products = [];
 
   /// 标记是否正在加载数据
+  /// 用于防止重复加载和显示加载指示器
   bool _isLoading = false;
 
   /// 标记是否还有更多数据可以加载
+  /// 当服务器返回的数据少于请求的数量时，表示没有更多数据
   bool _hasMore = true;
 
   /// 标记是否发生加载错误
+  /// 用于显示错误提示和重试按钮
   bool _hasError = false;
 
   /// 存储错误信息，用于显示给用户
   String _errorMessage = '';
 
   /// 当前页码，用于分页加载
+  /// 每次成功加载后递增
   int _currentPage = 1;
 
   @override
   void initState() {
     super.initState();
+    // 组件初始化时加载第一页数据
     _loadProducts();
   }
 
   /// 加载商品数据
   ///
-  /// 如果正在加载或没有更多数据，则直接返回
-  /// 加载成功时会更新商品列表和分页信息
-  /// 加载失败时会设置错误状态和错误信息
+  /// 流程：
+  /// 1. 检查是否可以加载（不在加载中且还有更多数据）
+  /// 2. 设置加载状态，清除错误状态
+  /// 3. 调用 API 获取数据
+  /// 4. 成功则添加数据到列表，更新页码和加载状态
+  /// 5. 失败则设置错误状态和错误信息
   Future<void> _loadProducts() async {
+    // 防止重复加载
     if (_isLoading || !_hasMore) return;
 
     setState(() {
@@ -58,14 +71,19 @@ class HomeRecommendProductsState extends State<HomeRecommendProducts> {
     });
 
     try {
+      // 调用商品列表 API
+      // 这个 API 返回的是不带收藏状态的商品列表
       final newProducts = await ProductService.getProducts(
         currentPage: _currentPage,
         pageSize: 10,
       );
 
       setState(() {
+        // 将新数据添加到列表末尾
         _products.addAll(newProducts);
+        // 页码加1，准备加载下一页
         _currentPage++;
+        // 如果返回的数据为空，说明没有更多数据了
         _hasMore = newProducts.isNotEmpty;
         _isLoading = false;
       });
@@ -79,6 +97,7 @@ class HomeRecommendProductsState extends State<HomeRecommendProducts> {
   }
 
   /// 对外暴露的加载方法，供父组件调用
+  /// 主要用于首页下拉刷新或上拉加载更多时触发
   Future<void> loadProducts() async {
     await _loadProducts();
   }
@@ -198,7 +217,7 @@ class HomeRecommendProductsState extends State<HomeRecommendProducts> {
   /// 构建商品卡片
   /// 显示商品图片、名称、价格等信息
   /// 点击时跳转到商品详情页
-  Widget _buildProductCard(ProductX product) {
-    return ProductCard(product: product);
+  Widget _buildProductCard(ProductListItem product) {
+    return ProductListCard(product: product);
   }
 }
