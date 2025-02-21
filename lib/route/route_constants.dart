@@ -57,5 +57,5 @@ const String cartScreenRoute = "cart";
 const String paymentMethodScreenRoute = "payment_method";
 const String addNewCardScreenRoute = "add_new_card";
 const String thanksForOrderScreenRoute = "thanks_order";
-const String privacyPolicyScreenRoute = '/privacy-policy';
-const String termsConditionsScreenRoute = '/terms-conditions';
+const String privacyPolicyScreenRoute = "privacy_policy";
+const String termsConditionsScreenRoute = "terms_conditions";

@@ -97,5 +97,13 @@
     "quantity": "수량",
     "stock": "재고",
     "outOfStock": "품절",
-    "productDetails": "상품 상세"
+    "productDetails": "상품 상세",
+    "selectCountry": "국가 선택",
+    "countryRequired": "국가를 선택해주세요",
+    "countryIndia": "인도",
+    "countryUAE": "아랍에미리트",
+    "close": "닫기",
+    "invalidRequest": "잘못된 요청 매개변수",
+    "usernameExists": "이미 존재하는 사용자 이름입니다",
+    "serverError": "서버 오류, 나중에 다시 시도해주세요"
 } 

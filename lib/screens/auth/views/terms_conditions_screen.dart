@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../utils/http_client.dart';
+import 'package:flutter/foundation.dart';
 
 class TermsConditionsScreen extends StatefulWidget {
-  const TermsConditionsScreen({super.key});
+  final String countryCode;
+  final String locale;
+
+  const TermsConditionsScreen({
+    super.key,
+    required this.countryCode,
+    required this.locale,
+  });
 
   @override
   State<TermsConditionsScreen> createState() => _TermsConditionsScreenState();
@@ -22,10 +30,9 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
 
   Future<void> _loadContent() async {
     try {
-      final locale = AppLocalizations.of(context)!.localeName;
-      final response = await HttpClient.get(
-        '/base/client-country-config/private-and-service-item/$locale',
-      );
+      final url =
+          '/base/client-country-config/private-and-service-item/${widget.countryCode}/${widget.locale}';
+      final response = await HttpClient.get(url);
 
       if (response.statusCode == 200 && response.data['success']) {
         setState(() {
@@ -34,6 +41,7 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
         });
       }
     } catch (e) {
+      debugPrint('Debug - TermsConditionsScreen - Error: $e');
       setState(() => _isLoading = false);
     }
   }
@@ -52,4 +60,4 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
             ),
     );
   }
-} 
+}

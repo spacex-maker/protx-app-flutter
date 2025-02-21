@@ -155,5 +155,13 @@
     "cityDaegu": "Daegu",
     "cityGwangju": "Gwangju",
     "cityDaejeon": "Daejeon",
-    "cityUlsan": "Ulsan"
+    "cityUlsan": "Ulsan",
+    "selectCountry": "Select Country",
+    "countryRequired": "Please select a country",
+    "countryIndia": "India",
+    "countryUAE": "UAE",
+    "close": "Close",
+    "invalidRequest": "Invalid request parameters",
+    "usernameExists": "Username already exists",
+    "serverError": "Server error, please try again later"
 } 

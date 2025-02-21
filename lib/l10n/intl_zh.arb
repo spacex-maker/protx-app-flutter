@@ -177,5 +177,16 @@
     "cityDaegu": "大邱",
     "cityGwangju": "光州",
     "cityDaejeon": "大田",
-    "cityUlsan": "蔚山"
+    "cityUlsan": "蔚山",
+
+    "selectCountry": "选择国家",
+    "countryRequired": "请选择国家",
+    "countryIndia": "印度",
+    "countryUAE": "阿联酋",
+
+    "close": "关闭",
+
+    "invalidRequest": "请求参数错误",
+    "usernameExists": "用户名已存在",
+    "serverError": "服务器错误，请稍后重试"
 } 

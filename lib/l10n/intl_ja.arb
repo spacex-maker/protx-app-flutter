@@ -97,5 +97,13 @@
     "quantity": "数量",
     "stock": "在庫",
     "outOfStock": "在庫切れ",
-    "productDetails": "商品詳細"
+    "productDetails": "商品詳細",
+    "selectCountry": "国を選択",
+    "countryRequired": "国を選択してください",
+    "countryIndia": "インド",
+    "countryUAE": "UAE",
+    "close": "閉じる",
+    "invalidRequest": "リクエストパラメータが無効です",
+    "usernameExists": "ユーザー名は既に存在します",
+    "serverError": "サーバーエラー、後でもう一度お試しください"
 } 

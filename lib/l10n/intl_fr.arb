@@ -97,5 +97,13 @@
     "quantity": "Quantité",
     "stock": "Stock",
     "outOfStock": "Rupture de Stock",
-    "productDetails": "Détails du Produit"
+    "productDetails": "Détails du Produit",
+    "selectCountry": "Sélectionner un pays",
+    "countryRequired": "Veuillez sélectionner un pays",
+    "countryIndia": "Inde",
+    "countryUAE": "ÉAU",
+    "close": "Fermer",
+    "invalidRequest": "Paramètres de requête invalides",
+    "usernameExists": "Nom d'utilisateur déjà existant",
+    "serverError": "Erreur serveur, veuillez réessayer plus tard"
 } 

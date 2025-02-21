@@ -4,6 +4,7 @@ import '../utils/http_client.dart';
 import '../utils/storage.dart';
 import 'package:http/http.dart';
 import 'package:dio/dio.dart';
+import '../utils/logger.dart';
 
 class ProductService {
   static Future<List<ProductListItem>> getProducts({
@@ -63,7 +64,7 @@ class ProductService {
         ),
       );
 
-      print('API Response: ${response.data}');
+      log.info('API Response: ${response.data}');
 
       if (response.data['success']) {
         return ProductX.fromJson(response.data['data']);

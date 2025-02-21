@@ -97,5 +97,13 @@
     "quantity": "Menge",
     "stock": "Bestand",
     "outOfStock": "Nicht verfügbar",
-    "productDetails": "Produktdetails"
+    "productDetails": "Produktdetails",
+    "selectCountry": "Land auswählen",
+    "countryRequired": "Bitte wählen Sie ein Land",
+    "countryIndia": "Indien",
+    "countryUAE": "VAE",
+    "close": "Schließen",
+    "invalidRequest": "Ungültige Anfrageparameter",
+    "usernameExists": "Benutzername existiert bereits",
+    "serverError": "Serverfehler, bitte versuchen Sie es später erneut"
 } 

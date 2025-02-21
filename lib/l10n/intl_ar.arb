@@ -88,5 +88,13 @@
     "cityDaegu": "دايغو",
     "cityGwangju": "غوانغجو",
     "cityDaejeon": "دايجون",
-    "cityUlsan": "أولسان"
+    "cityUlsan": "أولسان",
+    "selectCountry": "اختر الدولة",
+    "countryRequired": "يرجى اختيار الدولة",
+    "countryIndia": "الهند",
+    "countryUAE": "الإمارات العربية المتحدة",
+    "close": "إغلاق",
+    "invalidRequest": "معلمات الطلب غير صالحة",
+    "usernameExists": "اسم المستخدم موجود بالفعل",
+    "serverError": "خطأ في الخادم، يرجى المحاولة لاحقاً"
 } 

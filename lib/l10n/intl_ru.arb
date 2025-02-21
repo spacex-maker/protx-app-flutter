@@ -97,5 +97,13 @@
     "quantity": "Количество",
     "stock": "В наличии",
     "outOfStock": "Нет в наличии",
-    "productDetails": "Описание товара"
+    "productDetails": "Описание товара",
+    "selectCountry": "Выберите страну",
+    "countryRequired": "Пожалуйста, выберите страну",
+    "countryIndia": "Индия",
+    "countryUAE": "ОАЭ",
+    "close": "Закрыть",
+    "invalidRequest": "Неверные параметры запроса",
+    "usernameExists": "Имя пользователя уже существует",
+    "serverError": "Ошибка сервера, повторите попытку позже"
 } 

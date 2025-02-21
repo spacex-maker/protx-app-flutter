@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../l10n/l10n.dart';
+import 'privacy_policy_screen.dart';
+import 'terms_conditions_screen.dart';
 
 import '../../../constants.dart';
 
@@ -23,8 +25,8 @@ class _SignUpScreenState extends State<SignUpScreen>
   late Animation<double> _fadeAnimation;
   bool _acceptedTerms = false;
 
-  // 创建一个 key 用于访问 SignUpForm
-  final _signUpFormKey = GlobalKey<SignUpFormState>();
+  final GlobalKey<SignUpFormState> _signUpFormKey =
+      GlobalKey<SignUpFormState>();
 
   @override
   void initState() {
@@ -48,6 +50,31 @@ class _SignUpScreenState extends State<SignUpScreen>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  void _showTermsOrPrivacy(bool isPrivacyPolicy) {
+    final signUpFormState = _signUpFormKey.currentState;
+    final countryCode = signUpFormState?.selectedCountryCode;
+    final locale = AppLocalizations.of(context)!.localeName;
+
+    if (countryCode == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.countryRequired),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => isPrivacyPolicy
+            ? PrivacyPolicyScreen(countryCode: countryCode, locale: locale)
+            : TermsConditionsScreen(countryCode: countryCode, locale: locale),
+      ),
+    );
   }
 
   @override
@@ -229,79 +256,48 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                                 const SizedBox(height: 16),
 
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white.withOpacity(0.1),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Transform.scale(
-                                        scale: 1.0,
-                                        child: Checkbox(
-                                          value: _acceptedTerms,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _acceptedTerms = value ?? false;
-                                            });
-                                          },
-                                          fillColor: MaterialStateProperty.all(
-                                              Colors.white),
-                                          checkColor: theme.primaryColor,
-                                        ),
+                                CheckboxListTile(
+                                  value: _acceptedTerms,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _acceptedTerms = value ?? false;
+                                    });
+                                  },
+                                  title: RichText(
+                                    text: TextSpan(
+                                      text: l10n.agreeToTerms + " ",
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.9),
+                                        fontSize: 14,
                                       ),
-                                      Expanded(
-                                        child: Text.rich(
-                                          TextSpan(
-                                            text: l10n.agreeToTerms + " ",
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.white.withOpacity(0.9),
-                                              fontSize: 14,
-                                            ),
-                                            children: [
-                                              TextSpan(
-                                                text: l10n.termsOfService,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                ),
-                                                recognizer:
-                                                    TapGestureRecognizer()
-                                                      ..onTap = () {
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            termsConditionsScreenRoute);
-                                                      },
-                                              ),
-                                              TextSpan(text: " ${l10n.and} "),
-                                              TextSpan(
-                                                text: l10n.privacyPolicy,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                ),
-                                                recognizer:
-                                                    TapGestureRecognizer()
-                                                      ..onTap = () {
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            privacyPolicyScreenRoute);
-                                                      },
-                                              ),
-                                            ],
+                                      children: [
+                                        TextSpan(
+                                          text: l10n.termsOfService,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
                                           ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () =>
+                                                _showTermsOrPrivacy(false),
                                         ),
-                                      ),
-                                    ],
+                                        TextSpan(text: " ${l10n.and} "),
+                                        TextSpan(
+                                          text: l10n.privacyPolicy,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap =
+                                                () => _showTermsOrPrivacy(true),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
 
@@ -312,26 +308,21 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   width: double.infinity,
                                   height: 56,
                                   child: ElevatedButton(
-                                    onPressed: _acceptedTerms
-                                        ? () {
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              // 使用 key 获取 SignUpForm 的 state
-                                              _signUpFormKey.currentState
-                                                  ?.handleSignUp();
-                                            } else {
-                                              // 显示条款同意提示
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                      l10n.pleaseAgreeTerms),
-                                                  backgroundColor: Colors.red,
-                                                ),
-                                              );
-                                            }
-                                          }
-                                        : null,
+                                    onPressed: () {
+                                      if (!_acceptedTerms) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content:
+                                                Text(l10n.pleaseAgreeTerms),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      _signUpFormKey.currentState
+                                          ?.handleSignUp();
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.white,
                                       foregroundColor: theme.primaryColor,
