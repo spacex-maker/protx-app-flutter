@@ -188,5 +188,7 @@
 
     "invalidRequest": "请求参数错误",
     "usernameExists": "用户名已存在",
-    "serverError": "服务器错误，请稍后重试"
+    "serverError": "服务器错误，请稍后重试",
+    "cancel": "取消",
+    "confirm": "确认"
 } 

@@ -105,5 +105,8 @@
     "close": "閉じる",
     "invalidRequest": "リクエストパラメータが無効です",
     "usernameExists": "ユーザー名は既に存在します",
-    "serverError": "サーバーエラー、後でもう一度お試しください"
+    "serverError": "サーバーエラー、後でもう一度お試しください",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "settings": "設定"
 } 

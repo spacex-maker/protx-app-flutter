@@ -105,5 +105,8 @@
     "close": "닫기",
     "invalidRequest": "잘못된 요청 매개변수",
     "usernameExists": "이미 존재하는 사용자 이름입니다",
-    "serverError": "서버 오류, 나중에 다시 시도해주세요"
+    "serverError": "서버 오류, 나중에 다시 시도해주세요",
+    "cancel": "취소",
+    "confirm": "확인",
+    "settings": "설정"
 } 

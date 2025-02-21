@@ -9,9 +9,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:ui';
+import 'package:http/http.dart' as http;
 
 import 'components/login_form.dart';
 import '../../../screens/auth/views/password_recovery_screen.dart';
+import '../../../utils/http_client.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,6 +32,10 @@ class _LoginScreenState extends State<LoginScreen>
 
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+
+  // 添加 baseUrl 控制器
+  final _baseUrlController =
+      TextEditingController(text: 'http://10.0.2.2:8080/');
 
   // 定义输入框边框样式
   final outlineInputBorder = OutlineInputBorder(
@@ -53,6 +59,9 @@ class _LoginScreenState extends State<LoginScreen>
     );
 
     _animationController.forward();
+
+    // 初始化时设置当前的 baseUrl
+    _baseUrlController.text = HttpClient.getBaseUrl();
   }
 
   @override
@@ -60,7 +69,47 @@ class _LoginScreenState extends State<LoginScreen>
     _animationController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
+    _baseUrlController.dispose(); // 添加释放
     super.dispose();
+  }
+
+  // 添加显示设置对话框的方法
+  void _showSettingsDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.settings),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _baseUrlController,
+              decoration: InputDecoration(
+                labelText: 'API Base URL',
+                hintText: 'http://10.0.2.2:8080/',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(defaultBorderRadious),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.cancel),
+          ),
+          TextButton(
+            onPressed: () async {
+              // 使用新方法设置 baseUrl
+              await HttpClient.setBaseUrl(_baseUrlController.text);
+              if (mounted) Navigator.pop(context);
+            },
+            child: Text(AppLocalizations.of(context)!.confirm),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -75,6 +124,14 @@ class _LoginScreenState extends State<LoginScreen>
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          // 添加设置按钮
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white.withOpacity(0.9),
+            ),
+            onPressed: _showSettingsDialog,
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 16.0, top: 8.0),
             child: PopupMenuButton<Locale>(

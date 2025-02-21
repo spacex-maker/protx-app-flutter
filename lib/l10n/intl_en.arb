@@ -163,5 +163,7 @@
     "close": "Close",
     "invalidRequest": "Invalid request parameters",
     "usernameExists": "Username already exists",
-    "serverError": "Server error, please try again later"
+    "serverError": "Server error, please try again later",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
 } 

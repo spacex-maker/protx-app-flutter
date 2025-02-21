@@ -105,5 +105,8 @@
     "close": "Chiudi",
     "invalidRequest": "Parametri della richiesta non validi",
     "usernameExists": "Nome utente già esistente",
-    "serverError": "Errore del server, riprova più tardi"
+    "serverError": "Errore del server, riprova più tardi",
+    "cancel": "Annulla",
+    "confirm": "Conferma",
+    "settings": "Impostazioni"
 } 
